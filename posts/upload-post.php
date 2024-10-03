@@ -59,6 +59,7 @@ if ( ! in_array($_FILES["image"]["type"], $mime_types)) {
 // Get details of file (put here as putting after filemove conflicts)
 list($file_width, $file_height, $type, $attr) = getimagesize($_FILES["image"]["tmp_name"]); 
 
+
 // Create safe path and hash for file
 $pathinfo = pathinfo($_FILES["image"]["name"]);
 
@@ -70,7 +71,7 @@ $filename = $base . "." . $pathinfo['extension'];
 
 $filehash = md5($_FILES["image"]["name"]);
 
-$destination = __DIR__ . "/uploads/" . $filehash . "." . $pathinfo['extension'];
+$destination = dirname(__DIR__, 1) . "/storage/uploads/" . $filehash . "." . $pathinfo['extension'];
 
 if ( ! move_uploaded_file($_FILES["image"]["tmp_name"], $destination)) {
     exit("Can't move uploaded file");
@@ -87,7 +88,7 @@ $uploaded_at = time();
 
 // Upload to SQL
 
-$mysqli = require __DIR__ . "/database.php";
+$mysqli = require dirname(__DIR__, 1) . "/storage/database.php";
 
 $sql = "INSERT INTO posts (title, extension, filesize, filehash, file_height, file_width, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
 

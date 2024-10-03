@@ -2,7 +2,7 @@
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
-    $mysqli = require __DIR__ . "\database.php";
+    $mysqli = require dirname(__DIR__, 1) . "\storage\database.php";
 
     if (isset($_GET['post_id'])) {
         $postId = $mysqli->real_escape_string((int)$_GET['post_id']);
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 </head>
 <body>
     <h1><?= $post['title'] ?></h1>
-    <img src="uploads/<?= $post['filehash'] . "." . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>">
+    <img src="../storage/uploads/<?= $post['filehash'] . "." . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>">
 
     <p>Uploaded at <?= date("Y-m-d h:i:sa", $post['uploaded_at']) ?></p>
     <p>File type: <?=  $post['extension'] ?></P>
