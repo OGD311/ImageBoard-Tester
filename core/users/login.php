@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <title>Login</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
         <meta charset="UTF-8">
+        <?php include '../html-parts/header-elems.php' ?>
     </head>
 
     <body>

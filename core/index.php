@@ -30,7 +30,7 @@ while ($post = $result->fetch_assoc()) {
 <html>
     <head>
         <title>Home</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+        <?php include 'html-parts/header-elems.php' ?>
         <meta charset="UTF-8">
     </head>
 
@@ -45,7 +45,7 @@ while ($post = $result->fetch_assoc()) {
                 foreach ($posts as $post) {
                     echo '<div class="post">';
                     echo '<a href="/core/posts/view.php?post_id=' . $post['id'] . '">';
-                    echo '<img src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width="300" height="300">';
+                    echo '<img src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width="200" height="300" >';
 
                     echo '</div>';
                 }

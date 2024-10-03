@@ -13,9 +13,6 @@ if (isset($_SESSION['user_id'])) {
 }
 
 echo '
-<head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-</head>
 <nav>
     <ul>
         <li><a href="http://localhost:8080/core/index.php">Home</a></li>';
@@ -32,7 +29,7 @@ if ($user) {
 }
 
 echo ' 
-    <li><a href="http://localhost:8080/core/hide.php">Hide the page!</a></li>
+    <li><a href="http://localhost:8080/core/hide.php">Hide the page! [F9]</a></li>
     </ul>
 </nav>
 ';

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Professional Website</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -120,6 +120,8 @@
 
 
     </style>
+
+<script src="static/js/hide-page.js"></script>
 </head>
 <body>
     <header>
@@ -140,6 +142,7 @@
             <span class="close" id="closePopup">&times;</span>
             <h2>Welcome to My Website!</h2>
             <p>Thank you for visiting. Feel free to explore!</p>
+            <p><strong>Click on my name in the footer to be redirected back!</strong></p>
             <button id="closeButton">Close</button>
         </div>
     </div>
@@ -179,14 +182,14 @@
             <h2>Contact</h2>
             <p><strong>Name:</strong> Jordan Blake</p>
             <p><strong>Phone:</strong> (555) 678-9012</p>
-            <p><strong>Email:</strong> <a href="">jordan.blake@email.com</a></p>
-            <p><strong>Website:</strong> <a href="" target="_blank">www.jordanblakedev.com</a></p>
+            <p><strong>Email:</strong> <a href="#contact">jordan.blake@email.com</a></p>
+            <p><strong>Website:</strong> <a href="#contact" target="_blank">www.jordanblakedev.com</a></p>
             <p><strong>Address:</strong> 101 Hill Street, San Francisco, CA 90220</p>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 <a href="index.php">Jordan Blake</a> All rights reserved.</p>
+        <p>&copy; 2024 <a href="index.php" onclick="unhide();">Jordan Blake</a> All rights reserved.</p>
     </footer>
 </body>
 
@@ -255,7 +258,7 @@
         // Set timeout to close the popup after 5 seconds
         setTimeout(function() {
             popup.style.display = "none";
-        }, 1000); // 5000 milliseconds = 5 seconds
+        }, 2500); // 5000 milliseconds = 5 seconds
     };
 
     // Get the <span> element that closes the popup
@@ -279,6 +282,16 @@
             popup.style.display = "none";
         }
     };
+
+    function unhide() {
+        const lastVisited = localStorage.getItem('lastVisited');
+        if (lastVisited) {
+            window.location.href = lastVisited;
+        } else {
+            window.location.href = "./index.php"; 
+        }
+
+    }
 </script>
 
 

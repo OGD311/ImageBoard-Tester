@@ -71,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $userData['username'] ?>'s profile</title>
+    <?php include '../html-parts/header-elems.php' ?>
 </head>
 <body>
     <?php include '../html-parts/nav.php'; ?>
