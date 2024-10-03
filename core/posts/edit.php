@@ -40,13 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     }
 
     if ( ! isset($_SESSION['user_id'])) {
-        header('Location: error.php');
+        header('Location: ../errors/post-edit.php');
         exit();
     }
 
     
     if (($_SESSION['user_id'] !== $post['user_id']) && is_admin($_SESSION['user_id']) !== "1") {
-        header('Location: error.php');
+        header('Location: ../errors/post-edit.php');
         exit();
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 require_once '../config.php';
 
 session_start();
@@ -8,36 +9,32 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $mysqli = $_DBPATH;
 
     if (isset($_GET['post_id'])) {
-        $postId = $mysqli->real_escape_string((int)$_GET['post_id']);
-
-        $sql = sprintf("SELECT * FROM posts WHERE id = '%s'", $postId);
-
+        $postId = (int)$_GET['post_id']; // Casting to integer for safety
+    
+        // Combined SQL query using LEFT JOIN
+        $sql = sprintf("
+            SELECT p.*, u.id AS uploader_id, u.username, u.is_admin 
+            FROM posts p 
+            LEFT JOIN users u ON p.user_id = u.id 
+            WHERE p.id = '%s'", 
+            $mysqli->real_escape_string($postId)
+        );
+    
         $result = $mysqli->query($sql);
-
+    
         $post = $result->fetch_assoc();
-
-        if (! $post) {
-            header("Location: error.php");
+    
+        if (!$post) {
+            header("Location: ../errors/post-view.php");
             exit();
         }
 
-        if ($post['user_id']) {
-            $sql = sprintf("SELECT id, username, is_admin FROM users WHERE id = '%s'", $post['user_id']);
-
-            $result = $mysqli->query($sql);
-
-            $uploader = $result->fetch_assoc();
-
-        }
-        else {
-            $uploader = [
-                "id" => "1",
-                "username" => "Admin",
-                "is_admin" => "1"
-            ];
-        }
+        $uploader = [
+            "id" => $post['uploader_id'],
+            "username" => $post['username'],
+            "is_admin" => $post['is_admin']
+        ];
     }
-
     
 } else {
     header('Location: http://localhost:8080/core/index.php');
@@ -67,7 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <p>File type: <?=  $post['extension'] ?></P>
     <p>File Resolution: <?= $post['file_height'] . " x " . $post['file_width'] ?></p>
     <?php if ($uploader): ?>
-        <p>Uploaded by: <?= $uploader['username'] ?></p>
+        <p>Uploaded by: <a href="../users/user.php?user_id=<?php echo htmlspecialchars($uploader['id']); ?>"><?= $uploader['username'] ?></a>
+        </a></p>
     <?php endif ?>
     <p>MD5 Hash: <?= $post['filehash'] ?></p>
 

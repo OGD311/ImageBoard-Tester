@@ -18,3 +18,27 @@ function is_admin($user_id) {
 
     return $is_admin;
 }
+
+function post_title($post_id) {
+    $mysqli = require dirname(__DIR__, 1) . "\storage\database.php";
+
+    $sql = sprintf("SELECT title FROM posts WHERE id = '%s'", $post_id);
+
+    $result = $mysqli->query($sql);
+
+    $title = ($result->fetch_assoc())['title'];
+
+    return $title;
+}
+
+function get_user_id($username) {
+    $mysqli = require dirname(__DIR__, 1) . "\storage\database.php";
+
+    $sql = sprintf("SELECT id FROM users WHERE username = '%s'", $username);
+
+    $result = $mysqli->query($sql);
+
+    $user_id = ($result->fetch_assoc())['id'];
+
+    return $user_id;
+}

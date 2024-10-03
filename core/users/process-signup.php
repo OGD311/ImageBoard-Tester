@@ -38,7 +38,15 @@ if ( ! $stmt->prepare($sql) ) {
 $stmt->bind_param('ssi', $_POST['username'], $password_hash, time());
 
 if ($stmt->execute()) {
-    header('Location: signup-success.html');
+    $user_id = get_user_id($_POST['username']);
+    
+    session_start();
+
+    session_regenerate_id();
+
+    $_SESSION['user_id'] = $user_id;
+
+    header('Location: user.php?user_id=' . $user_id);
     exit;
 }
 else {
