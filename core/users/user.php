@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $accountId = (int)$_GET['user_id']; 
     
         $userQuery = sprintf("
-        SELECT username 
+        SELECT id, username 
         FROM users 
         WHERE id = '%s'", 
         $mysqli->real_escape_string($accountId));
@@ -113,5 +113,32 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 echo "<p>Error: " . htmlspecialchars($mysqli->error) . "</p>";
             }
         ?>
+
+
+    <!-- <form action="edit-user.php" method="post">
+
+        <input type="hidden" name="user_id" value="<?= $userData['id'] ?>">
+        <label for="title">Update Username</label>
+        <input type="text" id="title" name="title" value="<?= $userData['username'] ?>">
+        <label for="title">Update Password</label>
+        <input type="password" id="password" name="password" value="">
+        <br>
+
+        <button>Save</button>
+
+    </form> -->
     
+    <?php
+        if (isset($_SESSION['user_id'])) {
+            if ($_SESSION['user_id'] === $userData['id'] || is_admin($_SESSION['user_id'] === "1")) {
+                echo '<form action="delete-user.php" method="post" onsubmit="return confirm(\'Delete Account?\');">
+                        <input type="hidden" name="user_id" value="' . htmlspecialchars($userData['id']) . '">
+                        <button type="submit">Delete Account</button>
+                    </form>';
+
+            }
+        }
+    ?>
+    
+        
 </body>
