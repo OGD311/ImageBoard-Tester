@@ -1,5 +1,5 @@
 <?php
-require '../config.php';
+require_once '../config.php';
 
 session_start();
 
@@ -8,49 +8,44 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $mysqli = $_DBPATH;
 
     if (isset($_GET['post_id'])) {
+
         $postId = $mysqli->real_escape_string((int)$_GET['post_id']);
-
-        $sql = sprintf("SELECT * FROM posts WHERE id = '%s'", $postId);
-
+    
+        $sql = sprintf(
+            "SELECT p.*, u.username 
+             FROM posts p 
+             LEFT JOIN users u ON p.user_id = u.id 
+             WHERE p.id = '%s'",
+            $postId
+        );
+    
         $result = $mysqli->query($sql);
-
+    
+        if (!$result) {
+            die("Query failed: " . $mysqli->error);
+        }
+    
         $post = $result->fetch_assoc();
-
-        if (! $post) {
+    
+        if (!$post) {
             header("Location: upload.html");
             exit();
         }
 
-        if ($post['user_id']) {
-            $sql = sprintf("SELECT id, username FROM users WHERE id = '%s'", $post['user_id']);
-
-            $result = $mysqli->query($sql);
-
-            $uploader = $result->fetch_assoc();
-
-        }
-        else {
-            $uploader = null;
-        }
+        $uploader = $post['username'] ? ['id' => $post['user_id'], 'username' => $post['username']] : null;
+    
     } else {
         header('Location: http://localhost:8080/core/index.php');
         exit();
     }
 
-    if (isset($_SESSION['user_id'])) {
-        $sql = sprintf("SELECT is_admin FROM users WHERE id = '%s'", $_SESSION['user_id']);
-
-        $result = $mysqli->query($sql);
-
-        $user = $result->fetch_assoc();
-
-    } else {
+    if ( ! isset($_SESSION['user_id'])) {
         header('Location: error.php');
         exit();
     }
 
     
-    if (($_SESSION['user_id'] !== $post['user_id']) && $user['is_admin'] !== "1") {
+    if (($_SESSION['user_id'] !== $post['user_id']) && is_admin($_SESSION['user_id']) !== "1") {
         header('Location: error.php');
         exit();
     }

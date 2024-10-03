@@ -1,5 +1,5 @@
 <?php
-require '../config.php';
+require_once '../config.php';
 
 session_start();
 
@@ -57,10 +57,10 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <h1><?= $post['title'] ?></h1>
     <img src="<?= '/storage/uploads/' . $post['filehash'] . "." . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>">
 
-    <p>Uploaded on <?= date("Y-m-d h:i:sa", $post['uploaded_at']) ?></p>
+    <p>Uploaded on <?= date("d/m/y h:i:s a", $post['uploaded_at']) ?></p>
         
     <?php if ($post['updated_at']): ?>
-        <p>Last updated on <?= date("Y-m-d h:i:sa", $post['updated_at']) ?></p>
+        <p>Last updated on <?= date("d/m/y h:i:s a", $post['updated_at']) ?></p>
     <?php endif ?>
         
     
@@ -74,5 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] !== '' && ($uploader['id'] == $_SESSION['user_id'] || $user['is_admin'] == 1)): ?>
         <a href="edit.php?post_id=<?= $post['id'] ?>">Edit</a>
     <?php endif ?>
+
+    <?php include '../comments/comment-view.php'; ?>
+    
+    <?php include '../comments/comment-form.php'; ?>
     
 </body>

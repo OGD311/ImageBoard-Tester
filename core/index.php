@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require_once 'config.php';
 
 session_start();
 
@@ -21,7 +21,7 @@ $result = $mysqli->query($sql);
 
 $posts = [];
 while ($post = $result->fetch_assoc()) {
-    $posts[] = $post;  // Add each post to the array
+    $posts[] = $post; 
 }
 
 ?>

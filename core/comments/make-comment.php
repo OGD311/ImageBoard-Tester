@@ -4,8 +4,8 @@ require_once '../config.php';
 $mysqli = $_DBPATH; 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     
-    $sql = "UPDATE posts SET title = ?, updated_at = ? WHERE id = ? AND user_id = ?";
-    
+    $sql = "INSERT INTO comments (post_id, user_id, comment, posted_at) VALUES (?, ?, ?, ?)";
+
 
     $stmt = $mysqli->stmt_init();
 
@@ -13,14 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         die("SQL Error: " . $mysqli->error);
     }
 
-
-    $title = $mysqli->real_escape_string($_POST['title']);
-    $updatedAt = time();
     $postId = (int)$_POST['post_id'];
     $userId = (int)$_POST['user_id'];
+    $comment = $mysqli->real_escape_string($_POST['comment']);
+    $postedAt = time();
 
-
-    $stmt->bind_param("siii", $title, $updatedAt, $postId, $userId);
+    $stmt->bind_param("iisi", $postId, $userId, $comment, $postedAt);
 
 
     if ($stmt->execute()) {
