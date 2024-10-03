@@ -32,6 +32,7 @@ if ($user) {
 }
 
 echo ' 
+    <li><a href="http://localhost:8080/core/hide.php">Hide the page!</a></li>
     </ul>
 </nav>
 ';
