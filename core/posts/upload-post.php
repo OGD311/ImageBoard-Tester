@@ -1,4 +1,6 @@
 <?php
+require '../config.php';
+
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit("POST request method required");
@@ -71,7 +73,7 @@ $filename = $base . "." . $pathinfo['extension'];
 
 $filehash = md5($_FILES["image"]["name"]);
 
-$destination = dirname(__DIR__, 1) . "/storage/uploads/" . $filehash . "." . $pathinfo['extension'];
+$destination = $_UPLOADPATH . $filehash . "." . $pathinfo['extension'];
 
 if ( ! move_uploaded_file($_FILES["image"]["tmp_name"], $destination)) {
     exit("Can't move uploaded file");
@@ -79,6 +81,8 @@ if ( ! move_uploaded_file($_FILES["image"]["tmp_name"], $destination)) {
 
 // Other variables needed for SQL upload
 $title = $_POST['title'];
+
+$user_id = $_POST['user_id'];
 
 $extension = $pathinfo['extension'];
 
@@ -88,9 +92,9 @@ $uploaded_at = time();
 
 // Upload to SQL
 
-$mysqli = require dirname(__DIR__, 1) . "/storage/database.php";
+$mysqli = $_DBPATH;
 
-$sql = "INSERT INTO posts (title, extension, filesize, filehash, file_height, file_width, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO posts (title, user_id, extension, filesize, filehash, file_height, file_width, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $mysqli->stmt_init();
 
@@ -98,7 +102,7 @@ if (! $stmt->prepare($sql)) {
     die("SQL Error " . $mysqli->error);
 }
 
-$stmt->bind_param('ssisiis' , $title, $extension, $filesize, $filehash, $file_height, $file_width, $uploaded_at);
+$stmt->bind_param('sisisiis' , $title, $user_id, $extension, $filesize, $filehash, $file_height, $file_width, $uploaded_at);
 
 $stmt->execute();
 
@@ -111,4 +115,5 @@ $result = $mysqli->query($sql);
 $postID = ($result->fetch_assoc())['id'];
 
 
-header('Location : post.php?post_id=' . $postID);
+header('Location: http://localhost:8080/core/posts/view.php?post_id=' . $postID);
+exit();

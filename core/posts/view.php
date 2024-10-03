@@ -1,8 +1,11 @@
 <?php
+require '../config.php';
+
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
-    $mysqli = require dirname(__DIR__, 1) . "\storage\database.php";
+    $mysqli = $_DBPATH;
 
     if (isset($_GET['post_id'])) {
         $postId = $mysqli->real_escape_string((int)$_GET['post_id']);
@@ -14,8 +17,20 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $post = $result->fetch_assoc();
 
         if (! $post) {
-            header("Location: upload.html");
+            header("Location: error.php");
             exit();
+        }
+
+        if ($post['user_id']) {
+            $sql = sprintf("SELECT username FROM users WHERE id = '%s'", $post['user_id']);
+
+            $result = $mysqli->query($sql);
+
+            $user = $result->fetch_assoc();
+
+        }
+        else {
+            $user = null;
         }
     }
 
@@ -31,12 +46,20 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <title>Post <?= $post['id'] ?></title>
 </head>
 <body>
+    <?php include '../html-parts/nav.php'; ?>
     <h1><?= $post['title'] ?></h1>
-    <img src="../storage/uploads/<?= $post['filehash'] . "." . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>">
+    <img src="<?= '/storage/uploads/' . $post['filehash'] . "." . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>">
 
     <p>Uploaded at <?= date("Y-m-d h:i:sa", $post['uploaded_at']) ?></p>
     <p>File type: <?=  $post['extension'] ?></P>
     <p>File Resolution: <?= $post['file_height'] . " x " . $post['file_width'] ?></p>
+    <?php if ($user): ?>
+        <p>Uploaded by: <?= $user['username'] ?></p>
+    <?php endif ?>
     <p>MD5 Hash: <?= $post['filehash'] ?></p>
+
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <a href="edit.php?post_id=<?= $post['id'] ?>">Edit</a>
+    <?php endif ?>
     
 </body>
