@@ -22,23 +22,39 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         }
 
         if ($post['user_id']) {
-            $sql = sprintf("SELECT username FROM users WHERE id = '%s'", $post['user_id']);
+            $sql = sprintf("SELECT id, username FROM users WHERE id = '%s'", $post['user_id']);
 
             $result = $mysqli->query($sql);
 
-            $user = $result->fetch_assoc();
+            $uploader = $result->fetch_assoc();
 
         }
         else {
-            $user = null;
+            $uploader = null;
         }
+    } else {
+        header('Location: http://localhost:8080/core/index.php');
+        exit();
     }
 
-    if ($_SESSION['user_id'] !== $post['user_id']) {
+    if (isset($_SESSION['user_id'])) {
+        $sql = sprintf("SELECT is_admin FROM users WHERE id = '%s'", $_SESSION['user_id']);
+
+        $result = $mysqli->query($sql);
+
+        $user = $result->fetch_assoc();
+
+    } else {
         header('Location: error.php');
         exit();
     }
+
     
+    if (($_SESSION['user_id'] !== $post['user_id']) && $user['is_admin'] !== "1") {
+        header('Location: error.php');
+        exit();
+    }
+
 }
 ?>
 
@@ -54,10 +70,10 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     <h1>Editing: <?= $post['title'] ?></h1>
 
-    <form action="edit-post.php" method="post" enctype="multipart/form-data">
+    <form action="edit-post.php" method="post">
 
         <!-- <input type="hidden" name="MAX_FILE_SIZE" value="1048576"> -->
-        <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+        <input type="hidden" name="user_id" value="<?= $uploader['id'] ?>">
         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
         <label for="title">Post title</label>
         <input type="text" id="title" name="title" value="<?= $post['title'] ?>">
@@ -65,6 +81,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         
         <button>Save</button>
 
+    </form>
+
+    <form action="delete-post.php" method="post" onsubmit="return confirm('Delete Post?');">
+        <input type="hidden" name="user_id" value="<?= $uploader['id'] ?>">
+        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+        <br>
+
+        <button>Delete</button>
     </form>
     
 </body>

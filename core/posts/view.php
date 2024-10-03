@@ -22,19 +22,26 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         }
 
         if ($post['user_id']) {
-            $sql = sprintf("SELECT username FROM users WHERE id = '%s'", $post['user_id']);
+            $sql = sprintf("SELECT id, username, is_admin FROM users WHERE id = '%s'", $post['user_id']);
 
             $result = $mysqli->query($sql);
 
-            $user = $result->fetch_assoc();
+            $uploader = $result->fetch_assoc();
 
         }
         else {
-            $user = null;
+            $uploader = [
+                "id" => "1",
+                "username" => "Admin",
+                "is_admin" => "1"
+            ];
         }
     }
 
     
+} else {
+    header('Location: http://localhost:8080/core/index.php');
+    exit();
 }
 ?>
 
@@ -50,15 +57,21 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <h1><?= $post['title'] ?></h1>
     <img src="<?= '/storage/uploads/' . $post['filehash'] . "." . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>">
 
-    <p>Uploaded at <?= date("Y-m-d h:i:sa", $post['uploaded_at']) ?></p>
+    <p>Uploaded on <?= date("Y-m-d h:i:sa", $post['uploaded_at']) ?></p>
+        
+    <?php if ($post['updated_at']): ?>
+        <p>Last updated on <?= date("Y-m-d h:i:sa", $post['updated_at']) ?></p>
+    <?php endif ?>
+        
+    
     <p>File type: <?=  $post['extension'] ?></P>
     <p>File Resolution: <?= $post['file_height'] . " x " . $post['file_width'] ?></p>
-    <?php if ($user): ?>
-        <p>Uploaded by: <?= $user['username'] ?></p>
+    <?php if ($uploader): ?>
+        <p>Uploaded by: <?= $uploader['username'] ?></p>
     <?php endif ?>
     <p>MD5 Hash: <?= $post['filehash'] ?></p>
 
-    <?php if (isset($_SESSION['user_id'])): ?>
+    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] !== '' && ($uploader['id'] == $_SESSION['user_id'] || $user['is_admin'] == 1)): ?>
         <a href="edit.php?post_id=<?= $post['id'] ?>">Edit</a>
     <?php endif ?>
     

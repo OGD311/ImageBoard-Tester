@@ -7,7 +7,7 @@ $mysqli = $_DBPATH;
 
 if (isset($_SESSION['user_id'])) {
 
-    $sql = "SELECT * FROM users WHERE id = {$_SESSION['user_id']}";
+    $sql = "SELECT username FROM users WHERE id = {$_SESSION['user_id']}";
 
     $result = $mysqli->query($sql);
 
@@ -15,13 +15,14 @@ if (isset($_SESSION['user_id'])) {
 
 }
 
-$sql = "SELECT id, title, filehash, extension FROM posts LIMIT 15";
+$sql = "SELECT id, title, filehash, extension FROM posts ORDER BY uploaded_at DESC LIMIT 15;";
 
 $result = $mysqli->query($sql);
 
 $posts = [];
-
-var_dump($result);
+while ($post = $result->fetch_assoc()) {
+    $posts[] = $post;  // Add each post to the array
+}
 
 ?>
 
@@ -36,30 +37,11 @@ var_dump($result);
     <body>
         <?php include 'html-parts/nav.php'; ?>
 
-        <h1>Home</h1>
-
-        <?php if (isset($user)): ?>
-
-            <p>Hello <?= htmlspecialchars($user['username']) ?></p>
-
-            <a href='users/logout.php'>Log out</a>
-
-
-        <?php else: ?>
-
-            <p>Please <a href='users/login.php'>log in</a> or <a href='users/signup.html'>sign up</a></p>
-
-        <?php endif; ?>
+        <h1>Latest Posts</h1>
         
         <?php
             if ($result) {
-                // Fetch all rows as an associative array
-                $posts = [];
-                while ($post = $result->fetch_assoc()) {
-                    $posts[] = $post;  // Add each post to the array
-                }
-
-                // Iterate through the posts array
+  
                 foreach ($posts as $post) {
                     echo '<div class="post">';
                     echo '<a href="/core/posts/view.php?post_id=' . $post['id'] . '">';
@@ -70,6 +52,7 @@ var_dump($result);
             } else {
                 echo "<p>Error: " . htmlspecialchars($mysqli->error) . "</p>";
             }
+
         ?>
 
 
