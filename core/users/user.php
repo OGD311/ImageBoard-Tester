@@ -79,14 +79,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <h1><?= $userData['username'] ?>'s profile</h1>
 
     <h2><?= $userData['username'] ?>'s latest Posts</h2>
-        
+    <div id="posts" class="container-fluid text-center row justify-content-center">
         <?php
 
             if ($postsData) {
                 foreach ($postsData as $post) {
-                    echo '<div class="post">';
+                    echo '<div class="card justify-content-center border-2 m-1" style="width: 12rem;">';
                     echo '<a href="/core/posts/view.php?post_id=' . $post['id'] . '">';
-                    echo '<img src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width="300" height="300">';
+                    echo '<img class="card-img-top" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">';
                     echo '</a></div>';
                 }
 
@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
             
         ?>
-
+    </div>
     <h2><?= $userData['username'] ?>'s latest Comments</h2>
 
         <?php

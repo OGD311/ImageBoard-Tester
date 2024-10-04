@@ -2,7 +2,6 @@
 <html>
     <head>
         <title>Signup</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
         <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js" defer></script>
         <script src="/js/validate.js" defer></script>
         <meta charset="UTF-8">
