@@ -1,14 +1,14 @@
 <?php
 
-$GLOBALS['_DBPATH'] = require dirname(__DIR__, 1) . "\storage\database.php";
+$GLOBALS['_DBPATH'] = require __DIR__ . "\storage\database.php";
 
-$GLOBALS['_UPLOADPATH'] = dirname(__DIR__, 1) . "/storage/uploads/";
+$GLOBALS['_UPLOADPATH'] = __DIR__ . "/storage/uploads/";
 
 
 
 function is_admin($user_id) {
 
-    $mysqli = require dirname(__DIR__, 1) . "\storage\database.php";
+    $mysqli = require __DIR__ . "\storage\database.php";
 
     $sql = sprintf("SELECT is_admin FROM users WHERE id = '%s'", $user_id);
 
@@ -20,7 +20,7 @@ function is_admin($user_id) {
 }
 
 function post_title($post_id) {
-    $mysqli = require dirname(__DIR__, 1) . "\storage\database.php";
+    $mysqli = require __DIR__ . "\storage\database.php";
 
     $sql = sprintf("SELECT title FROM posts WHERE id = '%s'", $post_id);
 
@@ -32,7 +32,7 @@ function post_title($post_id) {
 }
 
 function get_user_id($username) {
-    $mysqli = require dirname(__DIR__, 1) . "\storage\database.php";
+    $mysqli = require __DIR__ . "\storage\database.php";
 
     $sql = sprintf("SELECT id FROM users WHERE username = '%s'", $username);
 

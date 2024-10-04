@@ -1,5 +1,5 @@
 <?php
-require_once 'config.php';
+require_once '../config.php';
 
 session_start();
 
@@ -38,15 +38,14 @@ while ($post = $result->fetch_assoc()) {
         <?php include 'html-parts/nav.php'; ?>
 
         <h1>Latest Posts</h1>
-        
+        <div id="posts" class="container-fluid text-center row justify-content-center">
         <?php
             if ($result) {
-  
                 foreach ($posts as $post) {
-                    echo '<div class="post">';
+                    echo '<div class="card justify-content-center border-2 m-1" style="width: 12rem;">';
                     echo '<a href="/core/posts/view.php?post_id=' . $post['id'] . '">';
-                    echo '<img src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width="200" height="300" >';
-
+                    echo '<img class="card-img-top" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">';
+                    echo '</a>';
                     echo '</div>';
                 }
             } else {
@@ -55,7 +54,9 @@ while ($post = $result->fetch_assoc()) {
 
         ?>
 
+        </div>
 
+        <?php include 'html-parts/footer.php'; ?>
     </body>
 
 </html>

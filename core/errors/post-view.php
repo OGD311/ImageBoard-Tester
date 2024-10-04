@@ -11,5 +11,6 @@
     <h1>Oops - could not find that post...</h1>
     <h4>Check your post id if you entered it manually</h4>
 
+    <?php include '../html-parts/footer.php'; ?>
 </body>
 </html>

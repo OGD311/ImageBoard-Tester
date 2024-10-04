@@ -36,5 +36,6 @@
 
 
         <p>Have an account? <a href='users/login.php'>Login</a></p>
+        <?php include '../html-parts/footer.php'; ?>
     </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../config.php';
+require_once '../../config.php';
 
 session_start();
 
@@ -141,5 +141,5 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         }
     ?>
     
-        
+    <?php include '../html-parts/footer.php'; ?>
 </body>

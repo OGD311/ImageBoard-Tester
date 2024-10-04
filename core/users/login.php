@@ -1,5 +1,5 @@
 <?php
-require_once '../config.php';
+require_once '../../config.php';
 
 
 $is_invalid = false;
@@ -72,6 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         <p>Don't have an account? <a href='signup.html'>Sign up</a></p>
+    
+        <?php include '../html-parts/footer.php'; ?>
     </body>
 
 </html>

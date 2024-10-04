@@ -1,5 +1,5 @@
 <?php
-require_once '../config.php';
+require_once '../../config.php';
 
 session_start();
 
@@ -86,5 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
         <button>Delete</button>
     </form>
+
+    <?php include '../html-parts/footer.php'; ?>
     
 </body>

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../config.php';
+require_once '../../config.php';
 
 session_start();
 
@@ -77,5 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <?php include '../comments/comment-view.php'; ?>
     
     <?php include '../comments/comment-form.php'; ?>
+
+    <?php include '../html-parts/footer.php' ?>
     
 </body>

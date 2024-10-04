@@ -11,5 +11,6 @@
     <h1>Oops - could not find that user...</h1>
     <h4>Check your user id if you entered it manually</h4>
 
+    <?php include '../html-parts/footer.php'; ?>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-require_once '../config.php';
+require_once '../../config.php';
 
 session_start();
 
@@ -53,6 +53,8 @@ if (isset($_SESSION['user_id'])) {
             document.getElementById('title').value = fileName;
         }
     </script>
+
+    <?php include '../html-parts/footer.php'; ?>
     
 </body>
 </html>

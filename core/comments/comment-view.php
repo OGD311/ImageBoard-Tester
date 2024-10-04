@@ -1,5 +1,5 @@
 <?php
-require_once '../config.php';
+require_once '../../config.php';
 
 $mysqli = $_DBPATH; 
 if ($_SERVER['REQUEST_METHOD'] === "GET") {

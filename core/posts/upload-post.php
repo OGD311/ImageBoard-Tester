@@ -1,5 +1,5 @@
 <?php
-require_once '../config.php';
+require_once '../../config.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -43,7 +43,7 @@ if ($_FILES["image"]["error"] !== UPLOAD_ERR_OK) {
 }
 
 
-if ($_FILES["image"]["size"] > 1048576) {
+if ($_FILES["image"]["size"] > 8388608 ) {
     exit("File too large (max 1MB)");
 }
 
