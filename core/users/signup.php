@@ -5,7 +5,7 @@
         <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js" defer></script>
         <script src="/js/validate.js" defer></script>
         <meta charset="UTF-8">
-        
+        <?php include '../html-parts/header-elems.php' ?>        
     </head>
 
     <body>

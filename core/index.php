@@ -45,8 +45,7 @@ while ($post = $result->fetch_assoc()) {
                     echo '<div class="card justify-content-center border-2 m-1" style="width: 12rem;">';
                     echo '<a href="/core/posts/view.php?post_id=' . $post['id'] . '">';
                     echo '<img class="card-img-top" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">';
-                    echo '</a>';
-                    echo '</div>';
+                    echo '</a></div>';
                 }
             } else {
                 echo "<p>Error: " . htmlspecialchars($mysqli->error) . "</p>";
