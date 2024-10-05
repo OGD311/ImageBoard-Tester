@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 05, 2024 at 09:36 PM
+-- Generation Time: Oct 05, 2024 at 09:41 PM
 -- Server version: 8.0.39
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `imageboard-tester-db`
 --
+CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `imageboard-tester-db`;
 
 -- --------------------------------------------------------
 
@@ -27,12 +29,15 @@ SET time_zone = "+00:00";
 -- Table structure for table `comments`
 --
 
-CREATE TABLE `comments` (
-  `id` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `post_id` int NOT NULL,
   `user_id` int NOT NULL,
   `comment` text NOT NULL,
-  `posted_at` int NOT NULL
+  `posted_at` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user` (`user_id`),
+  KEY `fk_post` (`post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -41,8 +46,8 @@ CREATE TABLE `comments` (
 -- Table structure for table `posts`
 --
 
-CREATE TABLE `posts` (
-  `id` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `posts` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
   `user_id` int NOT NULL,
   `extension` text NOT NULL,
@@ -51,7 +56,9 @@ CREATE TABLE `posts` (
   `file_height` int NOT NULL,
   `file_width` int NOT NULL,
   `uploaded_at` int NOT NULL,
-  `updated_at` int DEFAULT NULL
+  `updated_at` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uploader` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -60,61 +67,15 @@ CREATE TABLE `posts` (
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
-  `id` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` text NOT NULL,
   `password_hash` text NOT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` int NOT NULL
+  `created_at` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `comments`
---
-ALTER TABLE `comments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user` (`user_id`),
-  ADD KEY `fk_post` (`post_id`);
-
---
--- Indexes for table `posts`
---
-ALTER TABLE `posts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `uploader` (`user_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`(255));
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `comments`
---
-ALTER TABLE `comments`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `posts`
---
-ALTER TABLE `posts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
