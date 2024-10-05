@@ -3,11 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 05, 2024 at 09:41 PM
+-- Generation Time: Oct 05, 2024 at 09:45 PM
 -- Server version: 8.0.39
 -- PHP Version: 8.2.12
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -21,7 +20,7 @@ SET time_zone = "+00:00";
 -- Database: `imageboard-tester-db`
 --
 CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-USE `imageboard-tester-db`;
+USE imageboard-tester-db;
 
 -- --------------------------------------------------------
 
