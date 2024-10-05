@@ -1,4 +1,4 @@
 *.env
 */uploads/*
-
+*.DS_STORE
 *ext
