@@ -30,14 +30,14 @@ if (isset($_SESSION['user_id'])) {
 <body>
     <?php include '../html-parts/nav.php'; ?>
 
-    <form action="upload-post.php" method="post" enctype="multipart/form-data">
+    <form class="container-flex" action="upload-post.php" method="post" enctype="multipart/form-data">
 
         <!-- <input type="hidden" name="MAX_FILE_SIZE" value="1048576"> -->
         <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-        <label for="title">Post title</label>
+        <label for="title">Post title</label><br>
         <input type="text" id="title" name="title" value="">
         <br>
-        <label for="image">Image file</label>
+        <label for="image">Image file</label><br>
         <input type="file" id="image" name="image" onchange="updateTitle();">
         <br>
         <button>Upload</button>
@@ -48,7 +48,7 @@ if (isset($_SESSION['user_id'])) {
     <script>
         function updateTitle() {
             const files = event.target.files;
-            const fileName = files[0].name.replace('//.[^/.]+$/', "");
+            const fileName = files[0].name.replace(/\.[^/.]+$/, "");
 
             document.getElementById('title').value = fileName;
         }

@@ -91,14 +91,18 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     <p>Why don't you <a href='posts/upload.php'>upload</a> one?</p>
                     </span>";
 
+                } else if ($current_page_number == (int)number_of_pages() && $current_page_number == 1) {
+                    echo '<span>
+                    <strong> ' . $current_page_number . ' </strong>
+                    </span>';
+                    
                 } else if ($current_page_number == (int)number_of_pages()) {
                     echo '<span>
                     <a href="main.php?page=' . ($current_page_number - 1) . '"><<</a>
-                    <a href="main.php?page=' . ($current_page_number - 1) . '">'. ($current_page_number - 1) .'</a>
                     <strong> ' . $current_page_number . ' </strong>
                     </span>';
 
-                } else if ($current_page_number === 1) {
+                } else if ($current_page_number == 1) {
                     echo '<span>
                     <strong> ' . $current_page_number .  '</strong>
                     <a href="main.php?page=' . ($current_page_number + 1) . '">>></a>

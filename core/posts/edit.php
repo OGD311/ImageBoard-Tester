@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     }
 
     
-    if (($_SESSION['user_id'] !== $post['user_id']) && is_admin($_SESSION['user_id']) !== "1") {
+    if (($_SESSION['user_id'] !== $post['user_id']) && is_admin($_SESSION['user_id']) != "1") {
         header('Location: ../errors/post-edit.php');
         exit();
     }
