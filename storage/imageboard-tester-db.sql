@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `imageboard-tester-db`
 --
-CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE imageboard-tester-db;
 
 -- --------------------------------------------------------
