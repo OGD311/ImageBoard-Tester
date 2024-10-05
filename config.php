@@ -6,6 +6,7 @@ $GLOBALS['_UPLOADPATH'] = __DIR__ . "/storage/uploads/";
 
 $GLOBALS['_POSTS_PER_PAGE'] = 32;
 
+
 function is_admin($user_id) {
     $mysqli = require __DIR__ . "/storage/database.php";
 

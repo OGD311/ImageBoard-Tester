@@ -14,7 +14,7 @@ if (isset($_SESSION['user_id'])) {
     $user = $result->fetch_assoc();
 
 } else {
-    header('Location: http://localhost:8080/core/users/login.php');
+    header('Location: /core/users/login.php');
 }
 
 ?>

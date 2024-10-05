@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $uploader = $post['username'] ? ['id' => $post['user_id'], 'username' => $post['username']] : null;
     
     } else {
-        header('Location: http://localhost:8080/core/main.php');
+        header('Location: /core/main.php');
         exit();
     }
 

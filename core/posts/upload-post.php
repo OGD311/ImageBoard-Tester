@@ -115,5 +115,5 @@ $result = $mysqli->query($sql);
 $postID = ($result->fetch_assoc())['id'];
 
 
-header('Location: http://localhost:8080/core/posts/view.php?post_id=' . $postID);
+header('Location: /core/posts/view.php?post_id=' . $postID);
 exit();

@@ -14,10 +14,10 @@ document.addEventListener('keydown', function(e) {
             if (lastVisited) {
                 window.location.href = lastVisited;
             } else {
-                window.location.href = "http://localhost:8080/core/main.php"; 
+                window.location.href = "/core/main.php"; 
             }
         } else {
-            window.location.href = "http://localhost:8080/core/hide.php";
+            window.location.href = "/core/hide.php";
         }
     }
 });

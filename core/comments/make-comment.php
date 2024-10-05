@@ -23,13 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if ($stmt->execute()) {
 
-        header('Location: http://localhost:8080/core/posts/view.php?post_id=' . $postId);
+        header('Location: /core/posts/view.php?post_id=' . $postId);
         exit(); 
     } else {
         die("Error updating post: " . $stmt->error);
     }
 } else {
-    header('Location: http://localhost:8080/core/main.php');
+    header('Location: /core/main.php');
     exit();
 }
 ?>
