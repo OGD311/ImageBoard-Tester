@@ -48,7 +48,7 @@ if (isset($_SESSION['user_id'])) {
     <script>
         function updateTitle() {
             const files = event.target.files;
-            const fileName = files[0].name.replace(/\.[^/.]+$/, "");
+            const fileName = files[0].name.replace(//.[^/.]+$/, "");
 
             document.getElementById('title').value = fileName;
         }

@@ -1,13 +1,13 @@
 <?php
 
-$GLOBALS['_DBPATH'] = require __DIR__ . "\storage\database.php";
+$GLOBALS['_DBPATH'] = require __DIR__ . "/storage/database.php";
 
 $GLOBALS['_UPLOADPATH'] = __DIR__ . "/storage/uploads/";
 
 $GLOBALS['_POSTS_PER_PAGE'] = 32;
 
 function is_admin($user_id) {
-    $mysqli = require __DIR__ . "\storage\database.php";
+    $mysqli = require __DIR__ . "/storage/database.php";
 
     $stmt = $mysqli->prepare("SELECT is_admin FROM users WHERE id = ?");
     $stmt->bind_param("i", $user_id); 
@@ -21,7 +21,7 @@ function is_admin($user_id) {
 }
 
 function post_title($post_id) {
-    $mysqli = require __DIR__ . "\storage\database.php";
+    $mysqli = require __DIR__ . "/storage/database.php";
 
     $stmt = $mysqli->prepare("SELECT title FROM posts WHERE id = ?");
     $stmt->bind_param("i", $post_id); 
@@ -35,7 +35,7 @@ function post_title($post_id) {
 }
 
 function get_user_id($username) {
-    $mysqli = require __DIR__ . "\storage\database.php";
+    $mysqli = require __DIR__ . "/storage/database.php";
 
     $stmt = $mysqli->prepare("SELECT id FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
@@ -49,7 +49,7 @@ function get_user_id($username) {
 }
 
 function posts_count() {
-    $mysqli = require __DIR__ . "\storage\database.php";
+    $mysqli = require __DIR__ . "/storage/database.php";
 
     $stmt = $mysqli->prepare("SELECT COUNT(*) AS total_posts FROM posts");
     $stmt->execute();

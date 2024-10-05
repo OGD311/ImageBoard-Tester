@@ -29,7 +29,7 @@ $posts_count_array = str_split((string)$posts_count);
             }
 
             ?>
-            <?php if ($posts_count > 1): ?>
+            <?php if ($posts_count > 1 || $posts_count == 0): ?>
                 <p>Currently serving: <?= $posts_count ?> posts</p>
             <?php else: ?>
                 <p>Currently serving: <?= $posts_count ?> post</p>
