@@ -15,7 +15,7 @@ if (isset($_SESSION['user_id'])) {
 echo '
 <nav>
     <ul class="nav nav-pills justify-content-center">
-        <li class="nav-item border rounded" ><a class="nav-link" href="http://localhost:8080/core/index.php">Home</a></li>';
+        <li class="nav-item border rounded" ><a class="nav-link" href="http://localhost:8080/core/main.php">Home</a></li>';
 
 if ($user) {
     echo '<li class="nav-item border rounded"><a class="nav-link" href="http://localhost:8080/core/posts/upload.php">Upload</a></li>';
@@ -43,6 +43,5 @@ if ($user) {
 }
 
 echo'    </ul>
-</nav>
-';
+</nav>';
 ?>

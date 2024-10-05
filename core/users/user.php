@@ -27,7 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             SELECT p.* 
             FROM posts p 
             WHERE p.user_id = '%s' 
-            ORDER BY p.uploaded_at DESC", 
+            ORDER BY p.uploaded_at DESC
+            LIMIT " . ($_POSTS_PER_PAGE) . ";", 
             $mysqli->real_escape_string($accountId)
         );
         
@@ -53,13 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         }
         
     } else {
-        header("Location: ../index.php");
+        header("Location: ../main.php");
         exit();
     }
     
 
 } else {
-    header("Location: ../index.php");
+    header("Location: ../main.php");
     exit();
 }
 
@@ -131,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     
     <?php
         if (isset($_SESSION['user_id'])) {
-            if ($_SESSION['user_id'] === $userData['id'] || is_admin($_SESSION['user_id'] === "1")) {
+            if ($_SESSION['user_id'] === $userData['id'] || is_admin($_SESSION['user_id'])) {
                 echo '<form action="delete-user.php" method="post" onsubmit="return confirm(\'Delete Account?\');">
                         <input type="hidden" name="user_id" value="' . htmlspecialchars($userData['id']) . '">
                         <button type="submit">Delete Account</button>

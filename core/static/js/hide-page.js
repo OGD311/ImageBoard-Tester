@@ -14,7 +14,7 @@ document.addEventListener('keydown', function(e) {
             if (lastVisited) {
                 window.location.href = lastVisited;
             } else {
-                window.location.href = "http://localhost:8080/core/index.php"; 
+                window.location.href = "http://localhost:8080/core/main.php"; 
             }
         } else {
             window.location.href = "http://localhost:8080/core/hide.php";

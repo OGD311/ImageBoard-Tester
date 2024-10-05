@@ -27,6 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         die("SQL Error: " . htmlspecialchars($mysqli->error));
     }
 } else {
-    header('Location: http://localhost:8080/core/index.php');
+    header('Location: http://localhost:8080/core/main.php');
     exit();
 }

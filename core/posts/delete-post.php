@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
         $mysqli->commit();
 
-        header('Location: http://localhost:8080/core/index.php');
+        header('Location: http://localhost:8080/core/main.php');
         exit(); 
 
     } catch (mysqli_sql_exception $exception) {
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     
     }
 } else {
-    header('Location: http://localhost:8080/core/index.php');
+    header('Location: http://localhost:8080/core/main.php');
     exit();
 }
 ?>

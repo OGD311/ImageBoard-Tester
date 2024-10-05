@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         die("Error updating post: " . $stmt->error);
     }
 } else {
-    header('Location: http://localhost:8080/core/index.php');
+    header('Location: http://localhost:8080/core/main.php');
     exit();
 }
 ?>

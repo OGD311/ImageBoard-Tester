@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
                 $mysqli->commit();
                 session_destroy();
-                header('Location: http://localhost:8080/core/index.php');
+                header('Location: http://localhost:8080/core/main.php');
                 exit(); 
 
             } else {
@@ -58,6 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     
 
 } else {
-    header('Location: http://localhost:8080/core/index.php');
+    header('Location: http://localhost:8080/core/main.php');
     exit();
 }

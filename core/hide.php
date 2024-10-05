@@ -149,7 +149,7 @@
 
         <section id="home">
             <div class="profile-container">
-                <img src="../storage/jordanblake.png" alt="Profile Picture" class="profile-image">
+                <img src="static/images/hide/jordanblake.png" alt="Profile Picture" class="profile-image">
                 <h3>Jordan Blake</h3>
                 <p>Web Developer</p>
                 <p>I am a leading web development professional dedicated to bringing your digital vision to life. With a focus on innovative design and user-friendly functionality, I specialize in creating custom websites tailored to meet the unique needs of businesses across various industries.</p>
@@ -189,7 +189,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 <a href="index.php" onclick="unhide();">Jordan Blake</a> All rights reserved.</p>
+        <p>&copy; 2024 <a href="main.php" onclick="unhide();">Jordan Blake</a> All rights reserved.</p>
     </footer>
 </body>
 
@@ -288,7 +288,7 @@
         if (lastVisited) {
             window.location.href = lastVisited;
         } else {
-            window.location.href = "./index.php"; 
+            window.location.href = "./main.php"; 
         }
 
     }
