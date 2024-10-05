@@ -14,13 +14,13 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `imageboard-tester-db`
 --
 CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE imageboard-tester-db;
+USE 'imageboard-tester-db';
 
 -- --------------------------------------------------------
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   PRIMARY KEY (`id`),
   KEY `user` (`user_id`),
   KEY `fk_post` (`post_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -51,14 +51,14 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `user_id` int NOT NULL,
   `extension` text NOT NULL,
   `filesize` int NOT NULL,
-  `filehash` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `filehash` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `file_height` int NOT NULL,
   `file_width` int NOT NULL,
   `uploaded_at` int NOT NULL,
   `updated_at` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uploader` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` int NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`(255))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Constraints for dumped tables
