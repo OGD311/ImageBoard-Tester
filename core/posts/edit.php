@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $post = $result->fetch_assoc();
     
         if (!$post) {
-            header("Location: upload.html");
+            header("Location: upload.php");
             exit();
         }
 

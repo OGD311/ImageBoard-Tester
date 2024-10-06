@@ -21,6 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     
         $userResult = $mysqli->query($userQuery);
         $userData = $userResult->fetch_assoc();
+
+        if (! $userData) {
+            header('Location: ../errors/user-view.php');
+        }
         
 
         $postsQuery = sprintf("

@@ -30,7 +30,7 @@ if (isset($_SESSION['user_id'])) {
 <body>
     <?php include '../html-parts/nav.php'; ?>
 
-    <form class="container-fluid justify-content-center" action="upload-post.php" method="post" enctype="multipart/form-data">
+    <form class="container-fluid" action="upload-post.php" method="post" enctype="multipart/form-data">
 
         <!-- <input type="hidden" name="MAX_FILE_SIZE" value="1048576"> -->
         <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
