@@ -102,7 +102,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     
                 } else if ($current_page_number == (int)number_of_pages()) {
                     echo '<span>
-                    <a href="main.php?page=' . ($current_page_number - 1) . '"><<</a>
+                    <a href="main.php?page=1">1</a> 
+                    ... <a href="main.php?page=' . ($current_page_number - 1) . '"><<</a>
                     <strong> ' . $current_page_number . ' </strong>
                     </span>';
 
@@ -115,7 +116,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
                 } else {
                     echo '<span>
-                    <a href="main.php?page=' . ($current_page_number - 1) . '"><<</a>
+                    <a href="main.php?page=1">1</a> 
+                    ... <a href="main.php?page=' . ($current_page_number - 1) . '"><<</a>
                     <strong> ' . $current_page_number . ' </strong>
                     <a href="main.php?page=' . ($current_page_number + 1) . '">>></a>
                     ... <a href="main.php?page=' . ((int)number_of_pages()) . '">'. ((int)number_of_pages()) .'</a> 

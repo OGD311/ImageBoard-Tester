@@ -60,10 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     </div>
     <br>
     <div id="details" class="container-md text-center justify-content-center " style="font-size: 12px;">
-        <p>Uploaded on <?= date("d/m/y h:i:s a", $post['uploaded_at']) ?></p>
+        <p>Uploaded on <?= date("d/m/Y H:i", $post['uploaded_at']) ?></p>
             
         <?php if ($post['updated_at']): ?>
-            <p>Last updated on <?= date("d/m/y h:i:s a", $post['updated_at']) ?></p>
+            <p>Last updated on <?= date("d/m/Y H:i", $post['updated_at']) ?></p>
         <?php endif ?>
             
         
@@ -78,6 +78,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <?php if (!empty($_SESSION['user_id']) && ($uploader['id'] == $_SESSION['user_id'] || is_admin($_SESSION['user_id']))) : ?>
             <a href="edit.php?post_id=<?= $post['id'] ?>">Edit Post</a>
         <?php endif ?>
+
+
         
     </div>
 
@@ -86,11 +88,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     
     <?php include '../comments/comment-form.php'; ?>
 
-
-    <div class="container-md">
-        <p>POTTO</p>
-    </div>
-
     <?php include '../html-parts/footer.php'; ?>
     
+
+    <script>
+
+    </script>
+
 </body>
