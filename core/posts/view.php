@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <?php endif ?>
     <p>MD5 Hash: <?= $post['filehash'] ?></p>
 
-    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] !== '' && ($uploader['id'] == $_SESSION['user_id'] || $user['is_admin'] == 1)): ?>
+    <?php if (!empty($_SESSION['user_id']) && ($uploader['id'] == $_SESSION['user_id'] || is_admin($_SESSION['user_id']))) : ?>
         <a href="edit.php?post_id=<?= $post['id'] ?>">Edit</a>
     <?php endif ?>
 

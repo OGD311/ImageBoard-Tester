@@ -18,7 +18,9 @@ function is_admin($user_id) {
     $is_admin = $result->fetch_assoc()['is_admin'];
     $stmt->close();
 
-    return $is_admin;
+    $val = isset($is_admin) ? (bool)$is_admin : false;
+
+    return $val;
 }
 
 function post_title($post_id) {

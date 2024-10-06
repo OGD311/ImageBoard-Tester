@@ -39,7 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             if ($stmt->execute()) {
 
                 $mysqli->commit();
-                session_destroy();
+                if ($_SESSION['user_id'] == $userId) {
+                    session_destroy();
+                }
                 header('Location: /core/main.php');
                 exit(); 
 
