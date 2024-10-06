@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 <body>
     <?php include '../html-parts/nav.php'; ?>
 
-    <h1>Editing: <?= $post['title'] ?></h1>
+    <h1>Editing: '<?= $post['title'] ?>'</h1>
 
     <form action="edit-post.php" method="post">
 

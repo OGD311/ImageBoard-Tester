@@ -64,6 +64,20 @@ function posts_count() {
     return $posts_count['total_posts'];
 }
 
+function comment_count($post_id) {
+    $mysqli = require __DIR__ . "/storage/database.php";
+
+    $stmt = $mysqli->prepare("SELECT COUNT(*) AS total_comments FROM comments WHERE post_id = ?");
+    $stmt->bind_param("s", $post_id);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $comments_count = $result->fetch_assoc();
+    $stmt->close();
+
+    return $comments_count['total_comments'];
+}
+
 function number_of_pages() {
     $posts_per_page = $GLOBALS['_POSTS_PER_PAGE'];
 

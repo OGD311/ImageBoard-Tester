@@ -30,7 +30,7 @@ if (isset($_SESSION['user_id'])) {
 <body>
     <?php include '../html-parts/nav.php'; ?>
 
-    <form class="container-flex" action="upload-post.php" method="post" enctype="multipart/form-data">
+    <form class="container-fluid justify-content-center" action="upload-post.php" method="post" enctype="multipart/form-data">
 
         <!-- <input type="hidden" name="MAX_FILE_SIZE" value="1048576"> -->
         <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
@@ -38,11 +38,13 @@ if (isset($_SESSION['user_id'])) {
         <input type="text" id="title" name="title" value="">
         <br>
         <label for="image">Image file</label><br>
-        <input type="file" id="image" name="image" onchange="updateTitle();">
+        <input type="file" id="image" name="image" accept="image/*" onchange="updateTitle(); loadFile(event);">
         <br>
         <button>Upload</button>
 
     </form>
+
+    <img id="output" width=400 height=400 style="object-fit: contain;"/>
 
 
     <script>
@@ -52,6 +54,14 @@ if (isset($_SESSION['user_id'])) {
 
             document.getElementById('title').value = fileName;
         }
+
+        var loadFile = function(event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+            URL.revokeObjectURL(output.src)
+            }
+        };
     </script>
 
     <?php include '../html-parts/footer.php'; ?>

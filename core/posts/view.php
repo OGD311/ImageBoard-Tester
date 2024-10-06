@@ -52,31 +52,44 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 </head>
 <body>
     <?php include '../html-parts/nav.php'; ?>
-    <h1><?= $post['title'] ?></h1>
-    <img src="<?= '/storage/uploads/' . $post['filehash'] . "." . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>">
 
-    <p>Uploaded on <?= date("d/m/y h:i:s a", $post['uploaded_at']) ?></p>
-        
-    <?php if ($post['updated_at']): ?>
-        <p>Last updated on <?= date("d/m/y h:i:s a", $post['updated_at']) ?></p>
-    <?php endif ?>
-        
-    
-    <p>File type: <?=  $post['extension'] ?></P>
-    <p>File Resolution: <?= $post['file_height'] . " x " . $post['file_width'] ?></p>
-    <?php if ($uploader): ?>
-        <p>Uploaded by: <a href="../users/user.php?user_id=<?php echo htmlspecialchars($uploader['id']); ?>"><?= $uploader['username'] ?></a>
-        </a></p>
-    <?php endif ?>
-    <p>MD5 Hash: <?= $post['filehash'] ?></p>
 
-    <?php if (!empty($_SESSION['user_id']) && ($uploader['id'] == $_SESSION['user_id'] || is_admin($_SESSION['user_id']))) : ?>
-        <a href="edit.php?post_id=<?= $post['id'] ?>">Edit</a>
-    <?php endif ?>
+    <div class="container-fluid text-center justify-content-center">
+        <h1><?= $post['title'] ?></h1>
+        <img class="" src="<?= '/storage/uploads/' . $post['filehash'] . '.' . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>" style="border-width: 1px;">
+    </div>
+    <br>
+    <div id="details" class="container-md text-center justify-content-center " style="font-size: 12px;">
+        <p>Uploaded on <?= date("d/m/y h:i:s a", $post['uploaded_at']) ?></p>
+            
+        <?php if ($post['updated_at']): ?>
+            <p>Last updated on <?= date("d/m/y h:i:s a", $post['updated_at']) ?></p>
+        <?php endif ?>
+            
+        
+        <p>File type: <?=  $post['extension'] ?></P>
+        <p>File Resolution: <?= $post['file_height'] . " x " . $post['file_width'] ?></p>
+        <?php if ($uploader): ?>
+            <p>Uploaded by: <a href="../users/user.php?user_id=<?php echo htmlspecialchars($uploader['id']); ?>"><?= $uploader['username'] ?></a>
+            </a></p>
+        <?php endif ?>
+        <p>MD5 Hash: <?= $post['filehash'] ?></p>
+
+        <?php if (!empty($_SESSION['user_id']) && ($uploader['id'] == $_SESSION['user_id'] || is_admin($_SESSION['user_id']))) : ?>
+            <a href="edit.php?post_id=<?= $post['id'] ?>">Edit Post</a>
+        <?php endif ?>
+        
+    </div>
+
 
     <?php include '../comments/comment-view.php'; ?>
     
     <?php include '../comments/comment-form.php'; ?>
+
+
+    <div class="container-md">
+        <p>POTTO</p>
+    </div>
 
     <?php include '../html-parts/footer.php'; ?>
     

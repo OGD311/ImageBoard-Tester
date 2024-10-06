@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
 }
 
+    echo '<h3>Comments:</h3>';
 
     if ($result) {
 
@@ -28,18 +29,21 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
             echo '<span>' . date("d/m/y h:i:s a", $comment['posted_at']) . '</span>';
             if (isset($_SESSION['user_id'])) {
                 if ($_SESSION['user_id'] === $comment['user_id'] || is_admin($_SESSION['user_id'])) {
-                echo '<span>
+                echo '
                         <form action="../comments/delete-comment.php" method="post" onsubmit="return confirm(\'Delete comment?\');"">
                             <input type="hidden" name="user_id" value="' . htmlspecialchars($comment['user_id']) . '">
                             <input type="hidden" name="post_id" value="' . htmlspecialchars($comment['post_id']) . '">
                             <input type="hidden" name="comment_id" value="' . htmlspecialchars($comment['id']) . '">
                             <button>Delete</button>
-                        </form>
-                    </span>';
+                        </form>';
                 }
             }
     
             echo '</p></div>';
+        }
+
+        if ((count($comments)) == 0) {
+            echo '<p>No comments to display!</p>';
         }
     } else {
         echo "<p>Error: " . htmlspecialchars($mysqli->error) . "</p>";

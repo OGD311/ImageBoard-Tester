@@ -13,7 +13,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 echo '
-<nav>
+<nav class="navbar">
     <ul class="nav nav-pills justify-content-center">
         <li class="nav-item border rounded" ><a class="nav-link" href="/core/main.php">Home</a></li>';
 
