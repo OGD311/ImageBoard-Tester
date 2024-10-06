@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
 }
 
-    echo '<h3>Comments:</h3>';
+    echo '<h3>Comments: ('. $post['comment_count'] . ')</h3>';
 
     if ($result) {
 

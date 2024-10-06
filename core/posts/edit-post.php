@@ -2,6 +2,7 @@
 require_once '../../config.php';
 
 $mysqli = $_DBPATH; 
+
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     
     $sql = "UPDATE posts SET title = ?, updated_at = ? WHERE id = ? AND user_id = ?";

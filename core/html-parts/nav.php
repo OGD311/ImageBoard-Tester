@@ -13,7 +13,8 @@ if (isset($_SESSION['user_id'])) {
 }
 
 echo '
-<nav class="navbar">
+<nav class="navbar" style="background-color: #e3f2fd">
+    <div class="container-fluid">
     <ul class="nav nav-pills justify-content-center">
         <li class="nav-item border rounded" ><a class="nav-link" href="/core/main.php">Home</a></li>';
 
@@ -42,6 +43,15 @@ if ($user) {
     </li>';
 }
 
-echo'    </ul>
+echo'
+
+</ul>
+
+<form class="d-flex" role="search" action="/core/search-posts.php" method="post">
+    <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+</div>
 </nav>';
 ?>

@@ -3,7 +3,7 @@ require_once 'config.php';
 
 session_start();
 
-$posts_count = posts_count();
+$posts_count = posts_count('');
 $posts_count_array = str_split((string)$posts_count);
 
 
