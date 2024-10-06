@@ -3,10 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 05, 2024 at 09:45 PM
+-- Generation Time: Oct 06, 2024 at 06:28 PM
 -- Server version: 8.0.39
 -- PHP Version: 8.2.12
 
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -14,14 +15,13 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `imageboard-tester-db`
 --
-CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `imageboard-tester-db`;
-
 
 -- --------------------------------------------------------
 
@@ -29,16 +29,33 @@ USE `imageboard-tester-db`;
 -- Table structure for table `comments`
 --
 
-CREATE TABLE IF NOT EXISTS `comments` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `comments` (
+  `id` int NOT NULL,
   `post_id` int NOT NULL,
   `user_id` int NOT NULL,
   `comment` text NOT NULL,
-  `posted_at` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user` (`user_id`),
-  KEY `fk_post` (`post_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `posted_at` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Triggers `comments`
+--
+DELIMITER $$
+CREATE TRIGGER `after_comment_delete` AFTER DELETE ON `comments` FOR EACH ROW BEGIN
+    UPDATE posts
+    SET comment_count = comment_count - 1
+    WHERE id = OLD.post_id;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_comment_insert` AFTER INSERT ON `comments` FOR EACH ROW BEGIN
+    UPDATE posts
+    SET comment_count = comment_count + 1
+    WHERE id = NEW.post_id;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -46,20 +63,19 @@ CREATE TABLE IF NOT EXISTS `comments` (
 -- Table structure for table `posts`
 --
 
-CREATE TABLE IF NOT EXISTS `posts` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `posts` (
+  `id` int NOT NULL,
   `title` text NOT NULL,
   `user_id` int NOT NULL,
   `extension` text NOT NULL,
   `filesize` int NOT NULL,
-  `filehash` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `filehash` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `file_height` int NOT NULL,
   `file_width` int NOT NULL,
+  `comment_count` int NOT NULL DEFAULT '0',
   `uploaded_at` int NOT NULL,
-  `updated_at` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `uploader` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `updated_at` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -67,15 +83,61 @@ CREATE TABLE IF NOT EXISTS `posts` (
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `id` int NOT NULL,
   `username` text NOT NULL,
   `password_hash` text NOT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` int NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`(255))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `created_at` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user` (`user_id`),
+  ADD KEY `fk_post` (`post_id`);
+
+--
+-- Indexes for table `posts`
+--
+ALTER TABLE `posts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `uploader` (`user_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`(255));
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `posts`
+--
+ALTER TABLE `posts`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
