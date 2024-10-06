@@ -15,12 +15,12 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `imageboard-tester-db`
 --
-CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `imageboard-tester-db`;
 
 -- --------------------------------------------------------
@@ -35,7 +35,7 @@ CREATE TABLE `comments` (
   `user_id` int NOT NULL,
   `comment` text NOT NULL,
   `posted_at` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Triggers `comments`
@@ -69,13 +69,13 @@ CREATE TABLE `posts` (
   `user_id` int NOT NULL,
   `extension` text NOT NULL,
   `filesize` int NOT NULL,
-  `filehash` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `filehash` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `file_height` int NOT NULL,
   `file_width` int NOT NULL,
   `comment_count` int NOT NULL DEFAULT '0',
   `uploaded_at` int NOT NULL,
   `updated_at` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -89,7 +89,7 @@ CREATE TABLE `users` (
   `password_hash` text NOT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Indexes for dumped tables
