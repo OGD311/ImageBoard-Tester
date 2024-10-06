@@ -67,7 +67,8 @@ $pathinfo = pathinfo($_FILES["image"]["name"]);
 
 $base = $pathinfo["filename"];
 
-$base = preg_replace("/[^/w-]/", "_", $base);
+$base = preg_replace("/[^\w-]/", "_", $base);
+
 
 $filename = $base . "." . $pathinfo['extension'];
 
