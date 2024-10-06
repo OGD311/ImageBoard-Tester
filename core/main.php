@@ -33,39 +33,39 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $order_by = $_GET['order_by'];
         switch ($order_by) {
             case 'upload-asc':
-                $order_by = 'uploaded_at asc';
+                $order_by_statement = 'uploaded_at asc';
                 break;
             case 'upload-desc':
-                $order_by = 'uploaded_at desc';
+                $order_by_statement = 'uploaded_at desc';
                 break;
 
             case 'updated-asc':
-                $order_by = 'updated_at asc';
+                $order_by_statement = 'updated_at asc';
                 break;
             case 'updated-desc':
-                $order_by = 'updated_at desc';
+                $order_by_statement = 'updated_at desc';
                 break;
-
 
             case 'comments-asc':
-                $order_by = 'comment_count asc';
+                $order_by_statement = 'comment_count asc';
                 break;
             case 'comments-desc':
-                $order_by = 'comment_count desc';
+                $order_by_statement = 'comment_count desc';
                 break;
 
             default:
-            $order_by = 'uploaded_at desc';
+            $order_by_statement = 'uploaded_at desc';
         }
     } else {
-        $order_by = 'uploaded_at desc';
+        $order_by_statement = 'uploaded_at desc';
+        $order_by = 'upload-desc';
     }
 
 
     $sql = "SELECT id, title, filehash, extension, comment_count 
         FROM posts 
         WHERE title LIKE '%" . $like . "%' 
-        ORDER BY " . $order_by . " 
+        ORDER BY " . $order_by_statement . " 
         LIMIT " . $_POSTS_PER_PAGE . " 
         OFFSET " . (($current_page_number - 1) * $_POSTS_PER_PAGE) . ";";
     $result = $mysqli->query($sql);
@@ -123,14 +123,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <form name="order_by">
             <label for="sort-options">Choose an option:</label>
             <select id="sort-options" onchange="sort_posts(this.value, <?= $like ?>)">
-                <option value="upload-desc" <?= ($_GET['order_by'] == 'upload-desc') ? 'selected' : '' ?>>Upload date ↑</option>
-                <option value="upload-asc" <?= ($_GET['order_by'] == 'upload-asc') ? 'selected' : '' ?>>Upload date ↓</option>
+                <option value="upload-desc" <?= ($order_by == 'upload-desc') ? 'selected' : '' ?>>Upload date ↑</option>
+                <option value="upload-asc" <?= ($order_by == 'upload-asc') ? 'selected' : '' ?>>Upload date ↓</option>
 
-                <option value="updated-desc" <?= ($_GET['order_by'] == 'updated-desc') ? 'selected' : '' ?>>Updated at ↑</option>
-                <option value="updated-asc" <?= ($_GET['order_by'] == 'updated-asc') ? 'selected' : '' ?>>Updated at ↓</option>
+                <option value="updated-desc" <?= ($order_by == 'updated-desc') ? 'selected' : '' ?>>Updated at ↑</option>
+                <option value="updated-asc" <?= ($order_by == 'updated-asc') ? 'selected' : '' ?>>Updated at ↓</option>
 
-                <option value="comments-desc" <?= ($_GET['order_by'] == 'comments-desc') ? 'selected' : '' ?>>Comments ↑</option>
-                <option value="comments-asc" <?= ($_GET['order_by'] == 'comments-asc') ? 'selected' : '' ?>>Comments ↓</option>
+                <option value="comments-desc" <?= ($order_by == 'comments-desc') ? 'selected' : '' ?>>Comments ↑</option>
+                <option value="comments-asc" <?= ($order_by == 'comments-asc') ? 'selected' : '' ?>>Comments ↓</option>
             </select>
         </form>
 
