@@ -18,10 +18,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `imageboard_db`
+-- Database: `imageboard-tester-db`
 --
-CREATE DATABASE IF NOT EXISTS `` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE ``;
+CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `imageboard-tester-db`;
 
 -- --------------------------------------------------------
 
