@@ -2,3 +2,5 @@
 */uploads/*
 *.DS_STORE
 *ext
+
+*/css/

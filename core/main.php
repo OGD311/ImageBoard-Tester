@@ -92,10 +92,32 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     <body>
         <?php include 'html-parts/nav.php'; ?>
-
         
+        <br>
+
+        <div id="headings" class="container-fluid d-flex justify-content-between align-items-center">
+            
+            <h1 class="mb-0">Latest Posts</h1>
+
+            <form name="order_by" class="d-flex">
+                <label for="sort-options">Choose an option:</label>
+                <select id="sort-options" style="margin-left: 10px;" onchange="sort_posts(this.value, <?= $like ?>)">
+                    <option value="upload-desc" <?= ($order_by == 'upload-desc') ? 'selected' : '' ?>>Upload date ↑</option>
+                    <option value="upload-asc" <?= ($order_by == 'upload-asc') ? 'selected' : '' ?>>Upload date ↓</option>
+
+                    <option value="updated-desc" <?= ($order_by == 'updated-desc') ? 'selected' : '' ?>>Updated at ↑</option>
+                    <option value="updated-asc" <?= ($order_by == 'updated-asc') ? 'selected' : '' ?>>Updated at ↓</option>
+
+                    <option value="comments-desc" <?= ($order_by == 'comments-desc') ? 'selected' : '' ?>>Comments ↑</option>
+                    <option value="comments-asc" <?= ($order_by == 'comments-asc') ? 'selected' : '' ?>>Comments ↓</option>
+                </select>
+            </form>
+
+        </div>
+        <br>
+
+
         <div id="posts" class="container-fluid text-center row justify-content-center">
-        <h1>Latest Posts</h1>
             <?php
                 if ($result) {
                     foreach ($posts as $post) {
@@ -105,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         <img class="card-img-top" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">
                         </a>
                         <span style="display: flex; align-items: center; gap: 10px;">
-                            <img src="static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">
+                            <img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">
                             <p style="margin: 0;">'. $post['comment_count']. '</p>
                         </span>
                         </div>';
@@ -118,21 +140,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 }
             ?>
         </div>
+
+        
         <br>
-
-        <form name="order_by">
-            <label for="sort-options">Choose an option:</label>
-            <select id="sort-options" onchange="sort_posts(this.value, <?= $like ?>)">
-                <option value="upload-desc" <?= ($order_by == 'upload-desc') ? 'selected' : '' ?>>Upload date ↑</option>
-                <option value="upload-asc" <?= ($order_by == 'upload-asc') ? 'selected' : '' ?>>Upload date ↓</option>
-
-                <option value="updated-desc" <?= ($order_by == 'updated-desc') ? 'selected' : '' ?>>Updated at ↑</option>
-                <option value="updated-asc" <?= ($order_by == 'updated-asc') ? 'selected' : '' ?>>Updated at ↓</option>
-
-                <option value="comments-desc" <?= ($order_by == 'comments-desc') ? 'selected' : '' ?>>Comments ↑</option>
-                <option value="comments-asc" <?= ($order_by == 'comments-asc') ? 'selected' : '' ?>>Comments ↓</option>
-            </select>
-        </form>
 
         <div id="pages-buttons" class="container-fluid text-center row justify-content-center">
             
