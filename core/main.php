@@ -124,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         echo '
                         <div class="card justify-content-center border-2 m-1 " style="width: 12rem;">
                         <a href="/core/posts/view.php?post_id=' . $post['id'] . '">
-                        <img class="card-img-top" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">
+                        <img class="card-img-top m-1" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">
                         </a>
                         <span style="display: flex; align-items: center; gap: 10px;">
                             <img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">

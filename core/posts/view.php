@@ -56,8 +56,17 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     <div class="container-fluid text-center justify-content-center">
         <h1><?= $post['title'] ?></h1>
-        <img class="" src="<?= '/storage/uploads/' . $post['filehash'] . '.' . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>" style="border-width: 1px;">
+        <img id="image" class="" src="<?= '/storage/uploads/' . $post['filehash'] . '.' . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>" style="border-width: 1px;">
     </div>
+
+    <select id="widthSelect">
+        <option value="850">Sample (850 px)</option>
+        <option value="fitWidth">Fit Width</option>
+        <option value="fitHeight">Fit Height</option>
+        <option value="original">Original Size</option>
+    </select>
+
+    <div id="scalingInfo"></div>
     <br>
     <div id="details" class="container-md text-center justify-content-center " style="font-size: 12px;">
         <p>Uploaded on <?= date("d/m/Y H:i", $post['uploaded_at']) ?></p>
@@ -94,7 +103,53 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     
 
     <script>
+        const widthSelect = document.getElementById('widthSelect');
+        const image = document.getElementById('image'); // Ensure this matches your image ID
+        const scalingInfo = document.getElementById('scalingInfo');
 
+        // Store original dimensions
+        const originalWidth = <?= $post['file_width'] ?>;
+
+        function updateScalingInfo(currentWidth) {
+            const percentage = Math.min(((currentWidth / originalWidth) * 100).toFixed(0), 100);
+            scalingInfo.innerHTML = `Viewing sample resized to ${percentage}% of original size.`;
+        }
+
+        widthSelect.addEventListener('change', function() {
+            const option = this.value;
+
+            switch(option) {
+                case '850':
+                    image.style.height = '850px';
+                    image.style.width = 'auto';
+                    updateScalingInfo(850); // Use 850 since this is the set width
+                    break;
+                case 'fitWidth':
+                    image.style.width = '100%'; // Fit to container width
+                    image.style.height = 'auto';
+                    scalingInfo.innerHTML = ''; // Clear info for other options
+                    break;
+                case 'fitHeight':
+                    image.style.height = '100%'; // Fit to container height
+                    image.style.width = 'auto';
+                    scalingInfo.innerHTML = ''; // Clear info for other options
+                    break;
+                case 'original':
+                    image.style.height = ''; // Reset to original size
+                    image.style.width = ''; // Reset to original size
+                    scalingInfo.innerHTML = ''; // Clear info for other options
+                    break;
+            }
+        });
+
+        // Set initial size and scaling info on window load
+        window.onload = function() {
+            image.style.height = '850px';
+            image.style.width = 'auto';
+            updateScalingInfo(850);
+        };
     </script>
+
+
 
 </body>

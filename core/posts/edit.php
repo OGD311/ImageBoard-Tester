@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post <?= $post['id'] ?></title>
+    <title>Editing Post <?= $post['id'] ?></title>
     <?php include '../html-parts/header-elems.php' ?>
 </head>
 <body>
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <input type="text" id="title" name="title" value="<?= $post['title'] ?>">
         <br>
         
-        <button>Save</button>
+        <button  class="btn btn-primary">Save</button>
 
     </form>
 
@@ -84,8 +84,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
         <br>
 
-        <button>Delete</button>
+        <button  class="btn btn-danger">Delete</button>
     </form>
+
+    <br>
+    <a href="/core/posts/view.php?post_id=<?= $post['id'] ?>" class="btn btn-secondary">Close</a>
+
+
+
 
     <?php include '../html-parts/footer.php'; ?>
     
