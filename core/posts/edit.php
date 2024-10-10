@@ -74,6 +74,15 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <label for="title">Post title</label>
         <input type="text" id="title" name="title" value="<?= $post['title'] ?>">
         <br>
+
+        <label for="rating">Post rating:</label>
+        <select id="rating" name="rating">
+            <option value="0" <?= ($post['rating'] == 0) ? 'selected' : '' ?>>Safe</option>
+            <option value="1" <?= ($post['rating'] == 1) ? 'selected' : '' ?>>Questionable</option>
+            <option value="2" <?= ($post['rating'] == 2) ? 'selected' : '' ?>>Explicit</option>
+        </select>
+
+        <br>
         
         <button  class="btn btn-primary">Save</button>
 
@@ -84,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
         <br>
 
-        <button  class="btn btn-danger">Delete</button>
+        <button  class="btn btn-danger">Delete Post</button>
     </form>
 
     <br>

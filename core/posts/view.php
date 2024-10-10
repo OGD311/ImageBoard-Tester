@@ -35,6 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             "is_admin" => $post['is_admin']
         ];
     }
+
+    
     
 } else {
     header('Location: /core/main.php');
@@ -82,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             <p>Uploaded by: <a href="../users/user.php?user_id=<?php echo htmlspecialchars($uploader['id']); ?>"><?= $uploader['username'] ?></a>
             </a></p>
         <?php endif ?>
+        <p>Rating: <?= get_rating_text($post['rating']) ?></p>
         <p>MD5 Hash: <?= $post['filehash'] ?></p>
 
         <?php if (!empty($_SESSION['user_id']) && ($uploader['id'] == $_SESSION['user_id'] || is_admin($_SESSION['user_id']))) : ?>

@@ -10,12 +10,18 @@ $mysqli = $_DBPATH;
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     if (isset($_GET['search'])) {
-        $like = htmlspecialchars($_GET['search']);
+        $searchList = array_filter(explode('+', $_GET['search']));
     } else {
-        $like = '';
+        $searchList = [];
     }
 
-    $number_of_posts = (int)number_of_pages($like);
+    if (isset($_GET['rating'])) {
+        $rating = htmlspecialchars($_GET['rating']);
+    } else {
+        $rating = '';
+    }
+
+    $number_of_posts = min((int)number_of_pages('title', $searchList), (int)number_of_pages('rating', [$rating]));
 
     if (isset($_GET['page'])) {
         $current_page_number = $_GET['page'];
@@ -62,18 +68,50 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     }
 
 
-    $sql = "SELECT id, title, filehash, extension, comment_count 
-        FROM posts 
-        WHERE title LIKE '%" . $like . "%' 
-        ORDER BY " . $order_by_statement . " 
-        LIMIT " . $_POSTS_PER_PAGE . " 
-        OFFSET " . (($current_page_number - 1) * $_POSTS_PER_PAGE) . ";";
+    $sql = "SELECT p.id, p.title, p.filehash, p.extension, p.rating, p.comment_count 
+        FROM posts p ";
+        if (count($searchList) != 0) {
+            $sql .= "JOIN post_tags pt ON p.id = pt.post_id 
+            JOIN tags t ON pt.tag_id = t.id ";
+        }
+
+    if ($rating OR count($searchList) != 0) {
+        $sql .= " WHERE ";
+    }
+
+    if ($rating AND count($searchList) != 0) {
+        $include_and = ' AND ';
+    } else {
+        $include_and = ' ';
+    }
+
+    if ($rating) {
+        $sql .= "  p.rating LIKE '" . $rating . "'" . $include_and . "";
+    }
+
+    if (count($searchList) != 0) {
+
+        $conditions = [];
+        foreach ($searchList as $searchTerm) {
+            $conditions[] = "t.name LIKE '" . trim($searchTerm) . "' ";
+        }
+
+        $sql .= implode(' AND ', $conditions);
+    }
+
+    $sql .= "ORDER BY " . $order_by_statement . " 
+            LIMIT " . $_POSTS_PER_PAGE . " 
+            OFFSET " . (($current_page_number - 1) * $_POSTS_PER_PAGE) . ";";
+
+
     $result = $mysqli->query($sql);
 
     $posts = [];
     while ($post = $result->fetch_assoc()) {
         $posts[] = $post; 
     }
+
+    
 
 } else {
     header("Location: main.php");
@@ -87,6 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <head>
         <title>Posts</title>
         <?php include 'html-parts/header-elems.php' ?>
+        <link rel="stylesheet" href="/static/css/ratings.css">
         <meta charset="UTF-8">
     </head>
 
@@ -101,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
             <form name="order_by" class="d-flex">
                 <label for="sort-options">Choose an option:</label>
-                <select id="sort-options" style="margin-left: 10px;" onchange="sort_posts(this.value, <?= $like ?>)">
+                <select id="sort-options" style="margin-left: 10px;" onchange="sort_posts(this.value, <?= $searchList ?>)">
                     <option value="upload-desc" <?= ($order_by == 'upload-desc') ? 'selected' : '' ?>>Upload date ↑</option>
                     <option value="upload-asc" <?= ($order_by == 'upload-asc') ? 'selected' : '' ?>>Upload date ↓</option>
 
@@ -121,14 +160,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             <?php
                 if ($result) {
                     foreach ($posts as $post) {
+
+                        $apply_blur = '';
+
+                        if ($post['rating'] == 2) {
+                            $apply_blur = 'blur-explicit';
+                        }
+
                         echo '
-                        <div class="card justify-content-center border-2 m-1 " style="width: 12rem;">
+                        <div class="card justify-content-center border-2 m-1" style="width: 12rem;">
                         <a href="/core/posts/view.php?post_id=' . $post['id'] . '">
-                        <img class="card-img-top m-1" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">
+                        <img class="card-img-top m-1 ' . $apply_blur . '" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">
                         </a>
                         <span style="display: flex; align-items: center; gap: 10px;">
                             <img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">
-                            <p style="margin: 0;">'. $post['comment_count']. '</p>
+                            <p style="margin: 0;">'. $post['comment_count'] . '</p>
+                            <p style="margin: 0;" class="rating-' . $post['rating'] . '">' . substr(get_rating_text($post['rating']), 0, 1) . '</p>
                         </span>
                         </div>';
                     }
@@ -162,22 +209,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 } else if ($current_page_number == $number_of_posts) {
                     echo '<span>
                     <a href="main.php?page=1">1</a> 
-                    ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. $like .'&order_by='. $order_by .'"><<</a>
+                    ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. $searchList .'&order_by='. $order_by .'"><<</a>
                     <strong> ' . $current_page_number . ' </strong>';
                     
 
                 } else if ($current_page_number == 1) {
                     echo '<span>
                     <strong> ' . $current_page_number .  '</strong>
-                    <a href="main.php?page=' . ($current_page_number + 1) . '&search='. $like .'&order_by='. $order_by .'">>></a>
+                    <a href="main.php?page=' . ($current_page_number + 1) . '&search='. $searchList .'&order_by='. $order_by .'">>></a>
                     ... <a href="main.php?page=' . ($number_of_posts) . '">'. ($number_of_posts) .'</a>';
 
                 } else {
                     echo '<span>
                     <a href="main.php?page=1">1</a> 
-                    ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. $like .'&order_by='. $order_by .'"><<</a>
+                    ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. $searchList .'&order_by='. $order_by .'"><<</a>
                     <strong> ' . $current_page_number . ' </strong>
-                    <a href="main.php?page=' . ($current_page_number + 1) . '&search='. $like .'&order_by='. $order_by .'">>></a>
+                    <a href="main.php?page=' . ($current_page_number + 1) . '&search='. $searchList .'&order_by='. $order_by .'">>></a>
                     ... <a href="main.php?page=' . ($number_of_posts) . '">'. ($number_of_posts) .'</a>';
 
                 }

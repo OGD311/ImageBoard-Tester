@@ -13,6 +13,8 @@ if (isset($_SESSION['user_id'])) {
 
     $user = $result->fetch_assoc();
 
+    
+
 } else {
     header('Location: /core/users/login.php');
 }
@@ -40,6 +42,13 @@ if (isset($_SESSION['user_id'])) {
         <label for="image">Image file</label><br>
         <input type="file" id="image" name="image" accept="image/*" onchange="updateTitle(); loadFile(event);">
         <br>
+        <label for="rating">Post rating:</label>
+        <select id="rating" name="rating">
+            <option value="0">Safe</option>
+            <option value="1">Questionable</option>
+            <option value="2">Explicit</option>
+        </select>
+
         <button>Upload</button>
 
     </form>

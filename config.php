@@ -53,26 +53,74 @@ function get_user_id($username) {
     return $user_id;
 }
 
-function posts_count($like) {
+function posts_count($column, $likes) {
     $mysqli = require __DIR__ . "/storage/database.php";
 
-    $stmt = $mysqli->prepare("SELECT COUNT(*) AS total_posts FROM posts WHERE title LIKE '%" . $like . "%';");
-    $stmt->execute();
+    $sql = "SELECT COUNT(*) 
+    AS total_posts 
+    FROM posts";
 
-    $result = $stmt->get_result();
+    if (count($likes) != 0) {
+
+        $sql .= " WHERE ";
+
+        $conditions = [];
+        foreach ($likes as $like) {
+            $conditions[] = $column . " LIKE '" . $like . "' ";
+        }
+
+        $sql .= implode(' AND ', $conditions);
+    }
+
+    $sql .= ";";
+
+
+    $result = $mysqli->query($sql);
+
     $posts_count = $result->fetch_assoc();
-    $stmt->close();
 
-    return $posts_count['total_posts'];
+    return count($posts_count);
 }
 
 
-function number_of_pages($like) {
+function number_of_pages($column, $like) {
     $posts_per_page = $GLOBALS['_POSTS_PER_PAGE'];
 
-    $posts_count = posts_count($like);
+    $posts_count = posts_count($column, $like);
 
     $number_of_pages = ceil($posts_count / $posts_per_page);
 
     return $number_of_pages;
+}
+
+function get_rating_text($rating_value) {
+    switch ($rating_value) {
+        case 0: 
+            return 'Safe';
+        
+        case 1:
+            return 'Questionable';
+
+        case 2:
+            return 'Explicit';
+
+        default:
+            return 'Explicit';
+    }
+}
+
+function get_rating_value($rating_text) {
+    switch (strtolower(substr($rating_text, 0, 1))) {
+        case 's': 
+            return 0;
+        
+        case 'q':
+            return 1;
+
+        case 'e':
+            return 2;
+
+        default:
+            return 2;
+    }
 }

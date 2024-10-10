@@ -89,13 +89,19 @@ $extension = $pathinfo['extension'];
 
 $filesize = $_FILES["image"]["size"];
 
+$rating = $_POST['rating'];
+
+if (! is_numeric($rating) && $rating >= 0 && $rating <= 2) {
+    die('Please enter a valid rating');
+}
+
 $uploaded_at = time();
 
 // Upload to SQL
 
 $mysqli = $_DBPATH;
 
-$sql = "INSERT INTO posts (title, user_id, extension, filesize, filehash, file_height, file_width, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO posts (title, user_id, extension, filesize, filehash, file_height, file_width, rating, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $mysqli->stmt_init();
 
@@ -103,7 +109,7 @@ if (! $stmt->prepare($sql)) {
     die("SQL Error " . $mysqli->error);
 }
 
-$stmt->bind_param('sisisiis' , $title, $user_id, $extension, $filesize, $filehash, $file_height, $file_width, $uploaded_at);
+$stmt->bind_param('sisisiiis' , $title, $user_id, $extension, $filesize, $filehash, $file_height, $file_width, $rating, $uploaded_at);
 
 $stmt->execute();
 

@@ -5,7 +5,7 @@ $mysqli = $_DBPATH;
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     
-    $sql = "UPDATE posts SET title = ?, updated_at = ? WHERE id = ? AND user_id = ?";
+    $sql = "UPDATE posts SET title = ?, rating = ?, updated_at = ? WHERE id = ? AND user_id = ?";
     
 
     $stmt = $mysqli->stmt_init();
@@ -16,12 +16,18 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
     $title = $mysqli->real_escape_string($_POST['title']);
+    $rating = $mysqli->real_escape_string($_POST['rating']);
+
+    if (! is_numeric($rating) && $rating >= 0 && $rating <= 2) {
+        die('Please enter a valid rating');
+    }
+
     $updatedAt = time();
     $postId = (int)$_POST['post_id'];
     $userId = (int)$_POST['user_id'];
 
 
-    $stmt->bind_param("siii", $title, $updatedAt, $postId, $userId);
+    $stmt->bind_param("siiii", $title, $rating, $updatedAt, $postId, $userId);
 
 
     if ($stmt->execute()) {
