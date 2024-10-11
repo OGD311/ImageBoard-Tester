@@ -1,6 +1,6 @@
 <?php
 
-$GLOBALS['_DBPATH'] = require __DIR__ . "/storage/database.php";
+$GLOBALS['_DB'] = require __DIR__ . "/storage/database.php";
 
 $GLOBALS['_UPLOADPATH'] = __DIR__ . "/storage/uploads/";
 

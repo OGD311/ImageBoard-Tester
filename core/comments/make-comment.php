@@ -1,7 +1,7 @@
 <?php
 require_once '../../config.php';
 
-$mysqli = $_DBPATH; 
+$mysqli = $_DB; 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     
     $sql = "INSERT INTO comments (post_id, user_id, comment, posted_at) VALUES (?, ?, ?, ?)";

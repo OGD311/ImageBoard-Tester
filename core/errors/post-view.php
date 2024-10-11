@@ -1,7 +1,7 @@
 <?php
 require_once '../../config.php';
 
-$mysqli = $_DBPATH; 
+$mysqli = $_DB; 
 
 session_start();
 

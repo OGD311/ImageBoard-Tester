@@ -5,7 +5,7 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
-    $mysqli = $_DBPATH;
+    $mysqli = $_DB;
 
     if (isset($_GET['post_id'])) {
 

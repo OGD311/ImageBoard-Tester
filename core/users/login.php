@@ -6,7 +6,7 @@ $is_invalid = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $mysqli = $_DBPATH;
+    $mysqli = $_DB;
 
     $sql = sprintf("SELECT * FROM users WHERE username = '%s' ", $mysqli->real_escape_string($_POST['username']));
 

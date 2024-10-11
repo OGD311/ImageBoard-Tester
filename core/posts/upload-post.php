@@ -99,7 +99,7 @@ $uploaded_at = time();
 
 // Upload to SQL
 
-$mysqli = $_DBPATH;
+$mysqli = $_DB;
 
 $sql = "INSERT INTO posts (title, user_id, extension, filesize, filehash, file_height, file_width, rating, uploaded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 

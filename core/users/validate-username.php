@@ -2,7 +2,7 @@
 require_once '../../config.php';
 
 
-$mysqli = $_DBPATH;
+$mysqli = $_DB;
 
 $sql = sprintf("SELECT * FROM users WHERE username = '%s'",$mysqli->real_escape_string($_GET['username']));
 

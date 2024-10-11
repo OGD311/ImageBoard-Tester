@@ -1,7 +1,7 @@
 <?php
 require_once '../../config.php';
 
-$mysqli = $_DBPATH; 
+$mysqli = $_DB; 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     
     $sql = "DELETE FROM comments WHERE id = ? AND user_id = ? AND post_id = ?";

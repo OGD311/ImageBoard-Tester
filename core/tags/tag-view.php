@@ -1,7 +1,7 @@
 <?php
 require_once '../../config.php';
 
-$mysqli = $_DBPATH; 
+$mysqli = $_DB; 
 if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
     $sql = sprintf("SELECT t.name, t.count

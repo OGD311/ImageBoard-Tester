@@ -3,7 +3,7 @@ require_once '../../config.php';
 
 session_start();
 
-$mysqli = $_DBPATH;
+$mysqli = $_DB;
 
 if (isset($_SESSION['user_id'])) {
 
