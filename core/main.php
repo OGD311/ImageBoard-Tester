@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         
         <br>
 
-        <div id="headings" class="container-fluid d-flex justify-content-between align-items-center">
+        <div id="headings" class="contain container-fluid d-flex justify-content-between align-items-center">
             
             <h1 class="mb-0">Latest Posts</h1>
 

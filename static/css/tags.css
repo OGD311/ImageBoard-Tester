@@ -1,16 +1,17 @@
 .contain {
     display: flex;
     width: 98%; /* Full viewport width */
-    padding-left: 2%;
+    padding-left: 1%;
 }
 
 .left-div {
-    width: 6%; /* Take up all available space */
-
+    width: 15%; /* Take up all available space */
+    background-color: #91EECF;
+    margin-right: 1%;
 }
 
 .gap {
-    width: 200px; /* Set the desired width for the gap */
+    width: 2%; /* Set the desired width for the gap */
     background-color: #ecf0f1; /* Example color */
     text-align: center;
     line-height: 50px; /* Centering the text vertically */
@@ -18,5 +19,4 @@
 
 .right-div {
     width: 100%; /* This will also take up remaining space */
-
 }
