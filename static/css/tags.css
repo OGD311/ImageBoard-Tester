@@ -1,0 +1,22 @@
+.contain {
+    display: flex;
+    width: 98%; /* Full viewport width */
+    padding-left: 2%;
+}
+
+.left-div {
+    width: 6%; /* Take up all available space */
+
+}
+
+.gap {
+    width: 200px; /* Set the desired width for the gap */
+    background-color: #ecf0f1; /* Example color */
+    text-align: center;
+    line-height: 50px; /* Centering the text vertically */
+}
+
+.right-div {
+    width: 100%; /* This will also take up remaining space */
+
+}

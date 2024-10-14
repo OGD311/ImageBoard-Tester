@@ -23,20 +23,23 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
 if ($result) {
 
-    echo '<aside>';
+    echo '<div class="left-div">';
+        echo '<h4>Tags</h4>';
 
-    foreach ($tags as $tag) {
-        echo '<div class="tag"> <p>';
-        echo '<span>' . htmlspecialchars($tag['name']) . ' (' . htmlspecialchars($tag['count']) . ') </a></strong></span>';
-        echo '</p></div>';
-    }
-    
-    echo '</aside>';
+        echo '<ul>';
+        foreach ($tags as $tag) {
+            echo '<div class="tag"> <p>';
+            echo '<li>' . htmlspecialchars($tag['name']) . ' (' . htmlspecialchars($tag['count']) . ')</li>';
+            echo '</p></div>';
+        }
 
 
-    if ((count($tags)) == 0) {
-        echo '<p>No tags to display!</p>';
-    }
+        if ((count($tags)) == 0) {
+            echo '<p>No tags to display!</p>';
+        }
+
+        echo '</ul>';
+    echo '</div>';
 } else {
     echo "<p>Error: " . htmlspecialchars($mysqli->error) . "</p>";
 }

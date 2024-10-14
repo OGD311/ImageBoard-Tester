@@ -1,6 +1,6 @@
 <?php
 require_once '../config.php';
-
+require_once '../core/retrieve-posts.php';
 session_start();
 
 $mysqli = $_DB;
@@ -18,10 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     if (isset($_GET['rating'])) {
         $rating = htmlspecialchars($_GET['rating']);
     } else {
-        $rating = '';
+        $rating = null;
     }
 
-    $number_of_posts = min((int)number_of_pages('title', $searchList), (int)number_of_pages('rating', [$rating]));
+    $number_of_posts = min((int)number_of_pages('title', join("+", $searchList)), (int)number_of_pages('rating', [$rating]));
+
 
     if (isset($_GET['page'])) {
         $current_page_number = $_GET['page'];
@@ -67,51 +68,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $order_by = 'upload-desc';
     }
 
-
-    $sql = "SELECT p.id, p.title, p.filehash, p.extension, p.rating, p.comment_count 
-        FROM posts p ";
-        if (count($searchList) != 0) {
-            $sql .= "JOIN post_tags pt ON p.id = pt.post_id 
-            JOIN tags t ON pt.tag_id = t.id ";
-        }
-
-    if ($rating OR count($searchList) != 0) {
-        $sql .= " WHERE ";
-    }
-
-    if ($rating AND count($searchList) != 0) {
-        $include_and = ' AND ';
-    } else {
-        $include_and = ' ';
-    }
-
-    if ($rating) {
-        $sql .= "  p.rating LIKE '" . $rating . "'" . $include_and . "";
-    }
-
-    if (count($searchList) != 0) {
-
-        $conditions = [];
-        foreach ($searchList as $searchTerm) {
-            $conditions[] = "t.name LIKE '" . trim($searchTerm) . "' ";
-        }
-
-        $sql .= implode(' AND ', $conditions);
-    }
-
-    $sql .= "ORDER BY " . $order_by_statement . " 
-            LIMIT " . $_POSTS_PER_PAGE . " 
-            OFFSET " . (($current_page_number - 1) * $_POSTS_PER_PAGE) . ";";
-
-
-    $result = $mysqli->query($sql);
-
-    $posts = [];
-    while ($post = $result->fetch_assoc()) {
-        $posts[] = $post; 
-    }
-
-    
+    $posts = get_posts($searchList, $rating, $order_by_statement, $current_page_number);
+   
 
 } else {
     header("Location: main.php");
@@ -126,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <title>Posts</title>
         <?php include 'html-parts/header-elems.php' ?>
         <link rel="stylesheet" href="/static/css/ratings.css">
+        <link rel="stylesheet" href="/static/css/tags.css">
         <meta charset="UTF-8">
     </head>
 
@@ -140,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
             <form name="order_by" class="d-flex">
                 <label for="sort-options">Choose an option:</label>
-                <select id="sort-options" style="margin-left: 10px;" onchange="sort_posts(this.value, <?= $searchList ?>)">
+                <select id="sort-options" style="margin-left: 10px;" onchange="sort_posts(this.value, <?= join("+", $searchList) ?>)">
                     <option value="upload-desc" <?= ($order_by == 'upload-desc') ? 'selected' : '' ?>>Upload date ↑</option>
                     <option value="upload-asc" <?= ($order_by == 'upload-asc') ? 'selected' : '' ?>>Upload date ↓</option>
 
@@ -155,8 +114,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         </div>
         <br>
 
+        <div class='contain'>
 
-        <div id="posts" class="container-fluid text-center row justify-content-center">
+        <div class="left-div">
+            <?php include 'tags/tag-all.php'; ?>
+        </div>
+
+
+        <div id="posts" class=" right-div container-main text-center row justify-content-center">
             <?php
                 if ($result) {
                     foreach ($posts as $post) {
@@ -189,6 +154,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         </div>
 
         
+        </div>
+        
         <br>
 
         <div id="pages-buttons" class="container-fluid text-center row justify-content-center">
@@ -209,22 +176,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 } else if ($current_page_number == $number_of_posts) {
                     echo '<span>
                     <a href="main.php?page=1">1</a> 
-                    ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. $searchList .'&order_by='. $order_by .'"><<</a>
+                    ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'"><<</a>
                     <strong> ' . $current_page_number . ' </strong>';
                     
 
                 } else if ($current_page_number == 1) {
                     echo '<span>
                     <strong> ' . $current_page_number .  '</strong>
-                    <a href="main.php?page=' . ($current_page_number + 1) . '&search='. $searchList .'&order_by='. $order_by .'">>></a>
+                    <a href="main.php?page=' . ($current_page_number + 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'">>></a>
                     ... <a href="main.php?page=' . ($number_of_posts) . '">'. ($number_of_posts) .'</a>';
 
                 } else {
                     echo '<span>
                     <a href="main.php?page=1">1</a> 
-                    ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. $searchList .'&order_by='. $order_by .'"><<</a>
+                    ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'"><<</a>
                     <strong> ' . $current_page_number . ' </strong>
-                    <a href="main.php?page=' . ($current_page_number + 1) . '&search='. $searchList .'&order_by='. $order_by .'">>></a>
+                    <a href="main.php?page=' . ($current_page_number + 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'">>></a>
                     ... <a href="main.php?page=' . ($number_of_posts) . '">'. ($number_of_posts) .'</a>';
 
                 }

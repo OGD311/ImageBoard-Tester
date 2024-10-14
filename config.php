@@ -56,31 +56,37 @@ function get_user_id($username) {
 function posts_count($column, $likes) {
     $mysqli = require __DIR__ . "/storage/database.php";
 
-    $sql = "SELECT COUNT(*) 
-    AS total_posts 
-    FROM posts";
+    $sql = "SELECT COUNT(*) AS total_posts FROM posts";
 
-    if (count($likes) != 0) {
-
+    if (!empty($column) && !empty($likes)) {
         $sql .= " WHERE ";
-
         $conditions = [];
+
         foreach ($likes as $like) {
-            $conditions[] = $column . " LIKE '" . $like . "' ";
+            $conditions[] = "$column LIKE ?";
         }
 
         $sql .= implode(' AND ', $conditions);
     }
 
-    $sql .= ";";
+    $stmt = $mysqli->prepare($sql);
 
+    if (!empty($column) && !empty($likes)) {
+        $types = str_repeat('s', count($likes)); 
+        $likeParams = array_map(function($like) {
+            return "%$like%"; 
+        }, $likes);
+        
+        $stmt->bind_param($types, ...$likeParams);
+    }
 
-    $result = $mysqli->query($sql);
-
+    $stmt->execute();
+    $result = $stmt->get_result();
     $posts_count = $result->fetch_assoc();
 
-    return count($posts_count);
+    return $posts_count['total_posts'];
 }
+
 
 
 function number_of_pages($column, $like) {

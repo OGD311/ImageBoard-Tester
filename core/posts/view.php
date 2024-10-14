@@ -50,15 +50,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post <?= $post['id'] ?></title>
+    <link rel="stylesheet" href="/static/css/tags.css">
     <?php include '../html-parts/header-elems.php' ?>
 </head>
 <body>
     <?php include '../html-parts/nav.php'; ?>
 
+    <div class="contain">
+        <?php include '../tags/tag-view.php'; ?>
 
-    <div class="container-fluid text-center justify-content-center">
-        <h1><?= $post['title'] ?></h1>
-        <img id="image" class="" src="<?= '/storage/uploads/' . $post['filehash'] . '.' . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>" style="border-width: 1px;">
+        <div class="right-div container-fluid text-center justify-content-center">
+            <h1><?= $post['title'] ?></h1>
+            <img id="image" class="" src="<?= '/storage/uploads/' . $post['filehash'] . '.' . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>" style="border-width: 1px;">
+        </div>
+
+        
+
     </div>
 
     <select id="widthSelect">
@@ -94,13 +101,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
         
     </div>
-
+ 
 
     <?php include '../comments/comment-view.php'; ?>
     
     <?php include '../comments/comment-form.php'; ?>
-
-    <?php include '../tags/tag-view.php'; ?>
 
     <?php include '../html-parts/footer.php'; ?>
     
