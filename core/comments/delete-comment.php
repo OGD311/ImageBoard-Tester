@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         }
 
         $stmt->close();
+        $mysqli->close();
     } else {
         die("SQL Error: " . htmlspecialchars($mysqli->error));
     }

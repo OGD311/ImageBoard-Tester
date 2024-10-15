@@ -121,6 +121,6 @@ $result = $mysqli->query($sql);
 
 $postID = ($result->fetch_assoc())['id'];
 
-
+$mysqli->close();
 header('Location: /core/posts/view.php?post_id=' . $postID);
 exit();

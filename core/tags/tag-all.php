@@ -15,8 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
         $tags[] = $tag; 
     }
 
-    
-
 }
 
 if ($result) {
@@ -33,10 +31,12 @@ if ($result) {
     if ((count($tags)) == 0) {
         echo '<p>No tags to display!</p>';
     }
+
+    echo '</ul>';
 } else {
     echo "<p>Error: " . htmlspecialchars($mysqli->error) . "</p>";
 }
 
-    echo '</ul>';
+    
 
 ?>

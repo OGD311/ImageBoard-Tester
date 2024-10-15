@@ -36,7 +36,8 @@ function get_posts($search = [], $rating = null, $order_by = 'uploaded_at desc',
         return [];
     }
 
-
+    $mysqli->close();
+    
     $posts = [];
     while ($post = $result->fetch_assoc()) {
         $posts[] = $post; 

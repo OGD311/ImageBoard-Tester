@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
     if ($stmt->execute()) {
-
+        $mysqli->close();
         header('Location: /core/posts/view.php?post_id=' . $postId);
         exit(); 
     } else {

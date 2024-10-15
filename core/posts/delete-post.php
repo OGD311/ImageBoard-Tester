@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $stmtPost->execute();
 
         $mysqli->commit();
+        $mysqli->close();
 
         header('Location: /core/main.php');
         exit(); 
