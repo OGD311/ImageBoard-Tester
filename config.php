@@ -19,7 +19,8 @@ function is_admin($user_id) {
     $result = $stmt->get_result();
     $is_admin = $result->fetch_assoc()['is_admin'];
     $stmt->close();
-
+    $mysqli->close();
+    
     $val = isset($is_admin) ? (bool)$is_admin : false;
 
     return $val;
@@ -35,6 +36,7 @@ function post_title($post_id) {
     $result = $stmt->get_result();
     $title = $result->fetch_assoc()['title'];
     $stmt->close();
+    $mysqli->close();
 
     return $title;
 }
@@ -49,6 +51,7 @@ function get_user_id($username) {
     $result = $stmt->get_result();
     $user_id = $result->fetch_assoc()['id'];
     $stmt->close();
+    $mysqli->close();
 
     return $user_id;
 }
@@ -83,6 +86,8 @@ function posts_count($column, $likes) {
     $stmt->execute();
     $result = $stmt->get_result();
     $posts_count = $result->fetch_assoc();
+
+    $mysqli->close();
 
     return $posts_count['total_posts'];
 }

@@ -5,7 +5,8 @@
 }
 
 .left-div {
-    width: 15%; /* Take up all available space */
+    width: 15%;
+    /* width: max(15%, max-content); */
     background-color: #91EECF;
     margin-right: 1%;
 }
@@ -19,4 +20,21 @@
 
 .right-div {
     width: 100%; /* This will also take up remaining space */
+}
+
+.left-div h4 {
+    padding-left: 2px;
+}
+.left-div p {
+    font-size: 15px;
+}
+
+.left-div ul {
+    padding-left: 5px;  /* Remove left padding */
+    margin-left: 0;   /* Remove left margin */
+    list-style-type: none; /* Optional: remove bullet points */
+}
+
+.left-div li {
+    margin-left: 0;   /* Ensure list items don't have extra margin */
 }

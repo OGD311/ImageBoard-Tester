@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             <h1 class="mb-0">Latest Posts</h1>
 
             <form name="order_by" class="d-flex">
-                <label for="sort-options">Choose an option:</label>
+                <label for="sort-options">Sort posts by:</label>
                 <select id="sort-options" style="margin-left: 10px;" onchange="sort_posts(this.value, <?= join("+", $searchList) ?>)">
                     <option value="upload-desc" <?= ($order_by == 'upload-desc') ? 'selected' : '' ?>>Upload date ↑</option>
                     <option value="upload-asc" <?= ($order_by == 'upload-asc') ? 'selected' : '' ?>>Upload date ↓</option>
@@ -135,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         echo '
                         <div class="card justify-content-center border-2 m-1" style="width: 12rem;">
                         <a href="/core/posts/view.php?post_id=' . $post['id'] . '">
-                        <img class="card-img-top m-1 ' . $apply_blur . '" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">
+                        <img class="card-img-top ' . $apply_blur . '" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain; padding-top: 10px; padding-bottom: 2px;">
                         </a>
                         <span style="display: flex; align-items: center; gap: 10px;">
                             <img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">

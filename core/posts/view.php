@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $result = $mysqli->query($sql);
     
         $post = $result->fetch_assoc();
+        
     
         if (!$post) {
             header("Location: ../errors/post-view.php");
@@ -38,10 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     
     
+    
 } else {
     header('Location: /core/main.php');
     exit();
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +61,38 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <?php include '../html-parts/nav.php'; ?>
 
     <div class="contain">
-        <?php include '../tags/tag-view.php'; ?>
+        
+        <div class="left-div">
+            <?php include '../tags/tag-view.php'; ?>
+            <hr>
+            <h4>Details</h4>
+            <div id="details" class="">
+                <ul>
+                    <p>Uploaded on: <br><?= date("d/m/Y", $post['uploaded_at']) ?></p>
+                        
+                    <?php if ($post['updated_at']): ?>
+                        <p>Last updated on: <br> <?= date("d/m/Y", $post['updated_at']) ?></p>
+                    <?php endif ?>
+                        
+                    
+                    <p>File type: <?=  $post['extension'] ?></P>
+                    <p>File Resolution: <br><?= $post['file_height'] . " x " . $post['file_width'] ?></p>
+                    <?php if ($uploader): ?>
+                        <p>Uploaded by:<br> <a href="../users/user.php?user_id=<?php echo htmlspecialchars($uploader['id']); ?>"><?= $uploader['username'] ?></a>
+                        </a></p>
+                    <?php endif ?>
+                    <p>Rating: <?= get_rating_text($post['rating']) ?></p>
+                    <p>Post ID: <?= $post['id'] ?></p>
+
+                    <?php if (!empty($_SESSION['user_id']) && ($uploader['id'] == $_SESSION['user_id'] || is_admin($_SESSION['user_id']))) : ?>
+                        <a href="edit.php?post_id=<?= $post['id'] ?>">Edit Post</a>
+                    <?php endif ?>
+
+                </ul>
+                
+            </div>
+            <hr>
+        </div>
 
         <div class="right-div container-fluid text-center justify-content-center">
             <h1><?= $post['title'] ?></h1>
@@ -77,30 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     <div id="scalingInfo"></div>
     <br>
-    <div id="details" class="container-md text-center justify-content-center " style="font-size: 12px;">
-        <p>Uploaded on <?= date("d/m/Y H:i", $post['uploaded_at']) ?></p>
-            
-        <?php if ($post['updated_at']): ?>
-            <p>Last updated on <?= date("d/m/Y H:i", $post['updated_at']) ?></p>
-        <?php endif ?>
-            
-        
-        <p>File type: <?=  $post['extension'] ?></P>
-        <p>File Resolution: <?= $post['file_height'] . " x " . $post['file_width'] ?></p>
-        <?php if ($uploader): ?>
-            <p>Uploaded by: <a href="../users/user.php?user_id=<?php echo htmlspecialchars($uploader['id']); ?>"><?= $uploader['username'] ?></a>
-            </a></p>
-        <?php endif ?>
-        <p>Rating: <?= get_rating_text($post['rating']) ?></p>
-        <p>MD5 Hash: <?= $post['filehash'] ?></p>
 
-        <?php if (!empty($_SESSION['user_id']) && ($uploader['id'] == $_SESSION['user_id'] || is_admin($_SESSION['user_id']))) : ?>
-            <a href="edit.php?post_id=<?= $post['id'] ?>">Edit Post</a>
-        <?php endif ?>
-
-
-        
-    </div>
  
 
     <?php include '../comments/comment-view.php'; ?>
