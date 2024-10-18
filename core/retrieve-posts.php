@@ -25,8 +25,9 @@ function get_posts($search = [], $page = 1, $count = false) {
             $negation = true;
             $searchTerm = ltrim($searchTerm, '-');
         }
-
-        if (str_contains($searchTerm, 'rating')) {
+        if (empty($searchTerm)) {
+            $condition = '';
+        } elseif (str_contains($searchTerm, 'rating')) {
             preg_match('/rating\s*:\s*\'?(\S+?)\'?/', $searchTerm, $matches);
             $condition = "p.rating LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
         } elseif (str_contains($searchTerm, 'title')) {
@@ -51,7 +52,7 @@ function get_posts($search = [], $page = 1, $count = false) {
         $conditions[] = $condition;
         unset($search[$key]);
     }
-
+    
     if ($joinTags) {
         $sql .= " JOIN post_tags pt ON p.id = pt.post_id 
                   JOIN tags t ON pt.tag_id = t.id ";
@@ -65,7 +66,6 @@ function get_posts($search = [], $page = 1, $count = false) {
     $sql .= " ORDER BY " . get_order_sql($order_by) . " 
               LIMIT " . $_POSTS_PER_PAGE . " 
               OFFSET " . (($page - 1) * $_POSTS_PER_PAGE) . ";";
-
 
 
     $result = $mysqli->query($sql);

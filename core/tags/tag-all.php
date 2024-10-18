@@ -23,7 +23,7 @@ if ($result) {
     echo '<ul>';
     foreach ($tags as $tag) {
         echo '<div class="tag"> <p>';
-        echo '<li>' . htmlspecialchars($tag['name']) . ' (' . htmlspecialchars($tag['count']) . ')</li>';
+        echo '<li><a>+</a> <a>-</a> ' . htmlspecialchars($tag['name']) . ' (' . htmlspecialchars($tag['count']) . ')</li>';
         echo '</p></div>';
     }
 

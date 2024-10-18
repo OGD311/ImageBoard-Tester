@@ -45,6 +45,7 @@ if ($user) {
 
 if (isset($_GET["search"])) {
     $searchTerms = htmlspecialchars($_GET["search"]);
+    $searchTerms = preg_replace('/order\s*:\s*\'?(.+?)(\+|$)/', '' ,$searchTerms);
 } else {
     $searchTerms = '';
 }

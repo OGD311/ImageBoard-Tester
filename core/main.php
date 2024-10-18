@@ -19,10 +19,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     }
 
     if (! empty($searchList)) {
-        $order_by = array_search('order:', $searchList);
-        preg_match('/order\s*:\s*\'?(.+?)(\+|$)/', $searchList[$order_by], $matches);
+        if ($order_by = array_search('order:', $searchList)) {
+            preg_match('/order\s*:\s*\'?(.+?)(\+|$)/', $searchList[$order_by], $matches);
+            $order_by = $mysqli->real_escape_string($matches[1]);
 
-        $order_by = $mysqli->real_escape_string($matches[1]);
+        } else {
+            $order_by = 'upload-desc';
+        }
     } else {
         $order_by = 'upload-desc';
     }
