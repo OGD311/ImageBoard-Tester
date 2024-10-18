@@ -44,25 +44,28 @@ if ($user) {
 }
 
 if (isset($_GET["search"])) {
-    $searchTerms = htmlspecialchars($_GET["search"]);
-    $searchTerms = preg_replace('/order\s*:\s*\'?(.+?)(\+|$)/', '' ,$searchTerms);
-    
+    $searchTerms = htmlspecialchars(trim($_GET['search']));
+    $searchTerms = str_replace(' ', '+', $searchTerms);
+
+    $searchTerms = preg_replace('/order\s*:\s*\'?(.+?)(\+|$)/', '', $searchTerms);
+
+    $rating = '';
+
     if (str_contains($searchTerms, 'rating')) {
         preg_match('/rating\s*:\s*\'?(\S+?)\'?/', $searchTerms, $matches);
         
-        
         if (isset($matches[1])) {
-            $rating = ($matches[1]);
             $rating = strtolower(get_rating_text($matches[1], true));
-            $searchTerms = preg_replace('/rating\s*:\s*\'?(.+?)(\+|$)/', 'rating:' . $rating ,$searchTerms);
+            
+            $searchTerms = preg_replace('/rating\s*:\s*\'?(.+?)(\+|$)/', 'rating:' . $rating . ' ', $searchTerms);
         }
     }
 
     
-
 } else {
     $searchTerms = '';
 }
+
 
 echo'
 
