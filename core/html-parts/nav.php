@@ -43,12 +43,20 @@ if ($user) {
     </li>';
 }
 
+if (isset($_GET["search"])) {
+    $searchTerms = htmlspecialchars($_GET["search"]);
+} else {
+    $searchTerms = '';
+}
+
 echo'
 
 </ul>
 
 <form class="d-flex" role="search" action="/core/search-posts.php" method="post">
-    <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+    <input class="form-control me-2" type="search" name="search" placeholder="Search" 
+           value="' . $searchTerms .'" 
+           aria-label="Search">
     <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
 

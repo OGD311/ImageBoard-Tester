@@ -11,47 +11,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     
     if (isset($_GET['search'])) {
         $searchString = trim($_GET['search']);
-
         $searchString = str_replace(' ', '+', $searchString);
-
         $searchList = explode('+', $searchString);
+
     } else {
         $searchList = [];
     }
 
-  
-
-    if (isset($_GET['order_by'])) {
-        $order_by = $_GET['order_by'];
-        switch ($order_by) {
-            case 'upload-asc':
-                $order_by_statement = 'uploaded_at asc';
-                break;
-            case 'upload-desc':
-                $order_by_statement = 'uploaded_at desc';
-                break;
-
-            case 'updated-asc':
-                $order_by_statement = 'updated_at asc';
-                break;
-            case 'updated-desc':
-                $order_by_statement = 'updated_at desc';
-                break;
-
-            case 'comments-asc':
-                $order_by_statement = 'comment_count asc';
-                break;
-            case 'comments-desc':
-                $order_by_statement = 'comment_count desc';
-                break;
-
-            default:
-            $order_by_statement = 'uploaded_at desc';
-        }
+    if (! empty($searchList)) {
+        $order_by = array_search('order:', $searchList);
+        preg_match('/order\s*:\s*\'?(.+?)(\+|$)/', $searchList[$order_by], $matches);
+        var_dump($matches[1]);
+        $order_by = $mysqli->real_escape_string($matches[1]);
     } else {
-        $order_by_statement = 'uploaded_at desc';
         $order_by = 'upload-desc';
     }
+
 
     if (isset($_GET['page'])) {
         $current_page_number = intval($_GET['page']);
@@ -105,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
             <form name="order_by" class="d-flex">
                 <label for="sort-options">Sort posts by:</label>
-                <select id="sort-options" style="margin-left: 10px;" onchange="sort_posts(this.value, <?= join("+", $searchList) ?>)">
+                <select id="sort-options" style="margin-left: 10px;" onchange="sort_posts(this.value, '<?= $searchString ?>')">
                     <option value="upload-desc" <?= ($order_by == 'upload-desc') ? 'selected' : '' ?>>Upload date ↑</option>
                     <option value="upload-asc" <?= ($order_by == 'upload-asc') ? 'selected' : '' ?>>Upload date ↓</option>
 
@@ -115,6 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     <option value="comments-desc" <?= ($order_by == 'comments-desc') ? 'selected' : '' ?>>Comments ↑</option>
                     <option value="comments-asc" <?= ($order_by == 'comments-asc') ? 'selected' : '' ?>>Comments ↓</option>
                 </select>
+              
             </form>
 
         </div>
@@ -178,24 +154,33 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     
                 } else if ($current_page_number == $number_of_pages) {
                     echo '<span>
-                    <a href="main.php?page=1">1</a> 
+                    <a href="main.php?page=1&search='. join("+", $searchList) .'&order_by='. $order_by .'">1</a> 
+
                     ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'"><<</a>
+
                     <strong> ' . $current_page_number . ' </strong>';
                     
 
                 } else if ($current_page_number == 1) {
                     echo '<span>
                     <strong> ' . $current_page_number .  '</strong>
+
                     <a href="main.php?page=' . ($current_page_number + 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'">>></a>
-                    ... <a href="main.php?page=' . ($number_of_pages) . '">'. ($number_of_pages) .'</a>';
+
+                    ... <a href="main.php?page=' . ($number_of_pages) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'">'. ($number_of_pages) .'</a>';
 
                 } else {
                     echo '<span>
-                    <a href="main.php?page=1">1</a> 
-                    ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'"><<</a>
+                    <a href="main.php?page=1&search='. join("+", $searchList) .'&order_by='. $order_by .'">1</a> 
+
+                    ...
+                     <a href="main.php?page=' . ($current_page_number - 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'"><<</a>
+
                     <strong> ' . $current_page_number . ' </strong>
+
                     <a href="main.php?page=' . ($current_page_number + 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'">>></a>
-                    ... <a href="main.php?page=' . ($number_of_pages) . '">'. ($number_of_pages) .'</a>';
+
+                    ... <a href="main.php?page=' . ($number_of_pages) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'">'. ($number_of_pages) .'</a>';
 
                 }
 
@@ -223,19 +208,21 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     </body>
 
     <script>
-        function sort_posts(orderValue, searchValue = '') {
+       function sort_posts(orderValue, searchValue = '') {
             const url = new URL(window.location.href);
-            
-            // Set or replace the order_by parameter
-            url.searchParams.set('order_by', orderValue);
-            
-            // Set the search parameter if provided
-            if (searchValue) {
-                url.searchParams.set('search', searchValue);
-            } else {
-                url.searchParams.delete('search'); // Remove if no search value is provided
-            }
 
+            // Get the current search parameter
+            const currentSearch = url.searchParams.get('search') || '';
+
+            // Remove existing 'order: ____' if it exists
+            const updatedSearch = currentSearch.replace(/order:\s*[^+\s]*/g, '').trim();
+
+            // Construct the new search value
+            const newSearch = updatedSearch ? `${updatedSearch} order:${orderValue}` : `order:${orderValue}`;
+
+            // Update the search parameter
+            url.searchParams.set('search', newSearch);
+            console.log(newSearch);
             // Redirect to the updated URL
             document.location.href = url.toString();
         }
