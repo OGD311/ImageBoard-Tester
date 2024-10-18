@@ -82,18 +82,30 @@ function number_of_pages($posts_count) {
     return $number_of_pages;
 }
 
-function get_rating_text($rating_value) {
+function get_rating_text($rating_value, $short=false) {
     switch ($rating_value) {
         case 0: 
+            if ($short) {
+                return 'S';
+            }
             return 'Safe';
         
         case 1:
+            if ($short) {
+                return 'Q';
+            }
             return 'Questionable';
 
         case 2:
+            if ($short) {
+                return 'E';
+            }
             return 'Explicit';
 
         default:
+            if ($short) {
+                return 'E';
+            }
             return 'Explicit';
     }
 }

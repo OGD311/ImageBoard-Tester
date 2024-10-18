@@ -23,13 +23,13 @@ if ($result) {
     echo '<ul>';
     foreach ($tags as $tag) {
         echo '<div class="tag"> <p>';
-        echo '<li><a>+</a> <a>-</a> ' . htmlspecialchars($tag['name']) . ' (' . htmlspecialchars($tag['count']) . ')</li>';
+        echo '<li><a onclick="add_to_search(\'' . htmlspecialchars($tag['name']) . '\')">+</a> <a onclick="add_to_search(\'-' . htmlspecialchars($tag['name']) . '\')">-</a> ' . htmlspecialchars($tag['name']) . ' (' . htmlspecialchars($tag['count']) . ')</li>';
         echo '</p></div>';
     }
 
 
     if ((count($tags)) == 0) {
-        echo '<p>No tags to display!</p>';
+        echo '<p>No tags to display!</p>'; 
     }
 
     echo '</ul>';
@@ -40,3 +40,27 @@ if ($result) {
     
 
 ?>
+
+<script>
+    function add_to_search(tag) {
+    const url = new URL(window.location.href);
+    const currentSearch = url.searchParams.get('search') || '';
+
+    // Update regex to match 'character before' + 'tag' only if not followed by word characters
+    let updatedSearch = currentSearch
+        .replace(new RegExp(`(?:[^\\w]|\\b)${tag}\\b(?!\\w)`, 'g'), '')
+        .replace(/\s+/g, ' ') // Clean up extra spaces
+        .trim(); 
+
+    console.log(updatedSearch);
+
+    const newSearch = updatedSearch ? `${updatedSearch} ${tag}` : tag;
+
+    url.searchParams.set('search', newSearch.trim()); 
+    console.log(newSearch);
+    
+    // document.location.href = url.toString();
+}
+
+
+</script>

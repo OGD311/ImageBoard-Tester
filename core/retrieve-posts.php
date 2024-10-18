@@ -2,72 +2,99 @@
 require_once '../config.php';
 
 function get_posts($search = [], $page = 1, $count = false) {
-    if ($page == 0) {
-        $page = 1;
-    }
+    // Ensure the page is at least 1
+    $page = max(1, $page);
 
-    $joinTags = false;
+    // Setup defaults
     $order_by = 'uploaded_at DESC';
-    
+    $joinTags = false;
     $mysqli = require __DIR__ . "../../storage/database.php";
     $_POSTS_PER_PAGE = $GLOBALS['_POSTS_PER_PAGE'];
 
-    
-    $sql = "SELECT p.* FROM posts p";
-
-
+    // Base SQL query
+    $sql = "SELECT DISTINCT p.* FROM posts p";  // Use DISTINCT to avoid duplicates
     $conditions = [];
+    $includeTags = [];
+    $excludeTags = [];
 
-    foreach (array_filter($search) as $key => $searchTerm) {
+    foreach (array_filter($search) as $key => $term) {
         $negation = false;
 
-        if (strpos($searchTerm, '-') === 0) {
+        // Handle negation (tags that should be excluded)
+        if (strpos($term, '-') === 0) {
             $negation = true;
-            $searchTerm = ltrim($searchTerm, '-');
+            $term = ltrim($term, '-');
         }
-        if (empty($searchTerm)) {
-            $condition = '';
-        } elseif (str_contains($searchTerm, 'rating')) {
-            preg_match('/rating\s*:\s*\'?(\S+?)\'?/', $searchTerm, $matches);
-            $condition = "p.rating LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
-        } elseif (str_contains($searchTerm, 'title')) {
-            preg_match('/title\s*:\s*\'?(.+?)(\+|$)/', $searchTerm, $matches);
-            $condition = "p.title LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
-        } elseif (str_contains($searchTerm, 'user')) {
-            preg_match('/user\s*:\s*\'?(.+?)(\+|$)/', $searchTerm, $matches);
-            $condition = "p.user_id LIKE '" . $mysqli->real_escape_string(get_user_id($matches[1])) . "'";
-        } elseif (str_contains($searchTerm, 'order')) {
-            preg_match('/order\s*:\s*\'?(.+?)(\+|$)/', $searchTerm, $matches);
+
+        // Skip empty search terms
+        if (empty($term)) {
+            continue;
+        }
+
+        // Handle special cases: rating, title, user, and order
+        if (preg_match('/rating\s*:\s*\'?(\S+?)\'?/', $term, $matches)) {
+            $conditions[] = "p.rating LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
+        } elseif (preg_match('/title\s*:\s*\'?(.+?)(\+|$)/', $term, $matches)) {
+            $conditions[] = "p.title LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
+        } elseif (preg_match('/user\s*:\s*\'?(.+?)(\+|$)/', $term, $matches)) {
+            $conditions[] = "p.user_id LIKE '" . $mysqli->real_escape_string(get_user_id($matches[1])) . "'";
+        } elseif (preg_match('/order\s*:\s*\'?(.+?)(\+|$)/', $term, $matches)) {
             $order_by = $mysqli->real_escape_string($matches[1]);
-            $condition = '';
         } else {
-            $condition = "t.name LIKE '" . $mysqli->real_escape_string(trim($searchTerm)) . "'";
+            // Handle tags
             $joinTags = true;
+            if ($negation) {
+                $excludeTags[] = $mysqli->real_escape_string(trim($term));
+            } else {
+                $includeTags[] = $mysqli->real_escape_string(trim($term));
+            }
         }
-
-        if ($negation) {
-            $condition = str_replace('LIKE', 'NOT LIKE', $condition);
-        }
-
-        $conditions[] = $condition;
-        unset($search[$key]);
     }
-    
+
+    // Join post_tags and tags tables if tags are involved
     if ($joinTags) {
-        $sql .= " JOIN post_tags pt ON p.id = pt.post_id 
-                  JOIN tags t ON pt.tag_id = t.id ";
+        $sql .= " LEFT JOIN post_tags pt ON p.id = pt.post_id 
+                  LEFT JOIN tags t ON pt.tag_id = t.id";
     }
 
-    if (!empty(array_filter($conditions))) {
-        $sql .= " WHERE " . implode(' AND ', $conditions);
-    }
-
+    // Build WHERE clause with conditions and tag filtering
+    $whereClauses = array_filter($conditions);
     
+    if (!empty($includeTags)) {
+        $sql .= " WHERE p.id IN (
+                    SELECT pt.post_id 
+                    FROM post_tags pt 
+                    JOIN tags t ON pt.tag_id = t.id 
+                    WHERE t.name IN ('" . implode("', '", $includeTags) . "')
+                    GROUP BY pt.post_id
+                    HAVING COUNT(DISTINCT t.name) = " . count($includeTags) . "
+                  )";
+    }
+
+    if (!empty($excludeTags)) {
+        // Ensure posts that either do not have the excluded tags or have no tags at all
+        $sql .= (empty($includeTags) ? " WHERE " : " AND ") . "(
+                    p.id NOT IN (
+                        SELECT pt.post_id 
+                        FROM post_tags pt 
+                        JOIN tags t ON pt.tag_id = t.id 
+                        WHERE t.name IN ('" . implode("', '", $excludeTags) . "')
+                    )
+                    OR p.id NOT IN (SELECT post_id FROM post_tags)
+                  )";
+    }
+
+    // Append other conditions (e.g., rating, title, user)
+    if (!empty($whereClauses)) {
+        $sql .= (empty($includeTags) && empty($excludeTags) ? " WHERE " : " AND ") . implode(' AND ', $whereClauses);
+    }
+
+    // Order and pagination
     $sql .= " ORDER BY " . get_order_sql($order_by) . " 
               LIMIT " . $_POSTS_PER_PAGE . " 
               OFFSET " . (($page - 1) * $_POSTS_PER_PAGE) . ";";
 
-
+    // Execute the query and fetch posts
     $result = $mysqli->query($sql);
     if (!$result) {
         return [];
@@ -75,65 +102,73 @@ function get_posts($search = [], $page = 1, $count = false) {
 
     $posts = [];
     while ($post = $result->fetch_assoc()) {
-        $posts[] = $post; 
+        $posts[] = $post;
     }
 
+    // If count is requested, fetch the total number of posts
     if ($count) {
-        $count_sql = "SELECT COUNT(*) AS total_posts FROM posts p";
+        $count_sql = "SELECT COUNT(DISTINCT p.id) AS total_posts FROM posts p";
 
         if ($joinTags) {
-            $count_sql .= " JOIN post_tags pt ON p.id = pt.post_id 
-                      JOIN tags t ON pt.tag_id = t.id ";
-        }
-        
-
-        if (!empty(array_filter($conditions))) {
-            $count_sql .= " WHERE " . implode(' AND ', $conditions);
+            $count_sql .= " LEFT JOIN post_tags pt ON p.id = pt.post_id 
+                            LEFT JOIN tags t ON pt.tag_id = t.id";
         }
 
-        $count_sql .= " ;";
-        
+        $whereClauses = array_filter($conditions);
+    
+        if (!empty($includeTags)) {
+            $count_sql .= " WHERE p.id IN (
+                        SELECT pt.post_id 
+                        FROM post_tags pt 
+                        JOIN tags t ON pt.tag_id = t.id 
+                        WHERE t.name IN ('" . implode("', '", $includeTags) . "')
+                        GROUP BY pt.post_id
+                        HAVING COUNT(DISTINCT t.name) = " . count($includeTags) . "
+                    )";
+        }
+
+        if (!empty($excludeTags)) {
+            // Ensure posts that either do not have the excluded tags or have no tags at all
+            $count_sql .= (empty($includeTags) ? " WHERE " : " AND ") . "(
+                        p.id NOT IN (
+                            SELECT pt.post_id 
+                            FROM post_tags pt 
+                            JOIN tags t ON pt.tag_id = t.id 
+                            WHERE t.name IN ('" . implode("', '", $excludeTags) . "')
+                        )
+                        OR p.id NOT IN (SELECT post_id FROM post_tags)
+                    )";
+        }
+
+        // Append other conditions (e.g., rating, title, user)
+        if (!empty($whereClauses)) {
+            $count_sql .= (empty($includeTags) && empty($excludeTags) ? " WHERE " : " AND ") . implode(' AND ', $whereClauses);
+        }
+
         $count_result = $mysqli->query($count_sql);
-        $total_count = $count_result->fetch_assoc()['total_posts'];
-
-        
+        $total_posts = $count_result->fetch_assoc()['total_posts'];
 
         $mysqli->close();
 
         return [
             'posts' => $posts,
-            'total_posts' => $total_count,
+            'total_posts' => $total_posts,
         ];
     }
 
-  
     $mysqli->close();
-    return $posts; 
+    return $posts;
 }
 
 function get_order_sql($order_by) {
-    switch ($order_by) {
-        case 'upload-asc':
-            $order_by_statement = 'uploaded_at ASC';
-            break;
-        case 'upload-desc':
-            $order_by_statement = 'uploaded_at DESC';
-            break;
-        case 'updated-asc':
-            $order_by_statement = 'updated_at ASC';
-            break;
-        case 'updated-desc':
-            $order_by_statement = 'updated_at DESC';
-            break;
-        case 'comments-asc':
-            $order_by_statement = 'comment_count ASC';
-            break;
-        case 'comments-desc':
-            $order_by_statement = 'comment_count DESC';
-            break;
-        default:
-            $order_by_statement = 'uploaded_at DESC';
-    }
+    $order_map = [
+        'upload-asc' => 'uploaded_at ASC',
+        'upload-desc' => 'uploaded_at DESC',
+        'updated-asc' => 'updated_at ASC',
+        'updated-desc' => 'updated_at DESC',
+        'comments-asc' => 'comment_count ASC',
+        'comments-desc' => 'comment_count DESC',
+    ];
 
-    return $order_by_statement;
+    return $order_map[$order_by] ?? 'uploaded_at DESC';
 }

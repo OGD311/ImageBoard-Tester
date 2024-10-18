@@ -15,12 +15,12 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $searchList = explode('+', $searchString);
 
     } else {
-        $searchList = [];
+        header("Location: main.php?page=1&search=");
+        exit();
     }
 
     if (! empty($searchList)) {
-        if ($order_by = array_search('order:', $searchList)) {
-            preg_match('/order\s*:\s*\'?(.+?)(\+|$)/', $searchList[$order_by], $matches);
+        if (preg_match('/order\s*:\s*\'?(.+?)(\+|$)/', $searchString, $matches)) {
             $order_by = $mysqli->real_escape_string($matches[1]);
 
         } else {
@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     } else {
         $order_by = 'upload-desc';
     }
+
 
 
     if (isset($_GET['page'])) {
@@ -52,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
 
 } else {
-    header("Location: main.php");
+    header("Location: main.php?page=1&search=");
     exit();
 }
 
@@ -121,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         <span style="display: flex; align-items: center; gap: 10px;">
                             <img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">
                             <p style="margin: 0;">'. $post['comment_count'] . '</p>
-                            <p style="margin: 0;" class="rating-' . $post['rating'] . '">' . substr(get_rating_text($post['rating']), 0, 1) . '</p>
+                            <p style="margin: 0;" class="rating-' . $post['rating'] . '">' . get_rating_text($post['rating'], true) . '</p>
                         </span>
                         </div>';
                     }
@@ -207,23 +208,20 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     </body>
 
     <script>
-       function sort_posts(orderValue, searchValue = '') {
+        function sort_posts(orderValue, searchValue = '') {
             const url = new URL(window.location.href);
-
-            // Get the current search parameter
+            
             const currentSearch = url.searchParams.get('search') || '';
 
-            // Remove existing 'order: ____' if it exists
             const updatedSearch = currentSearch.replace(/order:\s*[^+\s]*/g, '').trim();
 
-            // Construct the new search value
+            
             const newSearch = updatedSearch ? `${updatedSearch} order:${orderValue}` : `order:${orderValue}`;
 
-            // Update the search parameter
             url.searchParams.set('search', newSearch);
-            console.log(newSearch);
-            // Redirect to the updated URL
+            
             document.location.href = url.toString();
         }
+
     </script>
 </html>
