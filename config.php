@@ -4,7 +4,7 @@ $GLOBALS['_DB'] = require __DIR__ . "/storage/database.php";
 
 $GLOBALS['_UPLOADPATH'] = __DIR__ . "/storage/uploads/";
 
-$GLOBALS['_POSTS_PER_PAGE'] = 1;
+$GLOBALS['_POSTS_PER_PAGE'] = 45;
 
 $GLOBALS['_TAGS_ALL_LIMIT'] = 16;
 

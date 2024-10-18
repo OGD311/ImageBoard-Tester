@@ -66,8 +66,7 @@ function get_posts($search = [], $page = 1, $count = false) {
               LIMIT " . $_POSTS_PER_PAGE . " 
               OFFSET " . (($page - 1) * $_POSTS_PER_PAGE) . ";";
 
-        
-    var_dump($sql);
+
 
     $result = $mysqli->query($sql);
     if (!$result) {
@@ -94,7 +93,6 @@ function get_posts($search = [], $page = 1, $count = false) {
 
         $count_sql .= " ;";
         
-        var_dump($count_sql);
         $count_result = $mysqli->query($count_sql);
         $total_count = $count_result->fetch_assoc()['total_posts'];
 
