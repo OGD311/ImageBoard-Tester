@@ -10,31 +10,11 @@ $mysqli = $_DB;
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     if (isset($_GET['search'])) {
-        $searchList = array_filter(explode('+', $_GET['search']));
+        $searchList = (explode('+', $_GET['search']));
     } else {
         $searchList = [];
     }
-
-    if (isset($_GET['rating'])) {
-        $rating = htmlspecialchars($_GET['rating']);
-    } else {
-        $rating = null;
-    }
-
-    $number_of_posts = min((int)number_of_pages('title', join("+", $searchList)), (int)number_of_pages('rating', [$rating]));
-
-
-    if (isset($_GET['page'])) {
-        $current_page_number = $_GET['page'];
-
-        if ($current_page_number > $number_of_posts) {
-            header('Location: main.php?page='. $number_of_posts .'');
-        }
-    } else {
-        $current_page_number = 1;
-    }
-
-    
+  
 
     if (isset($_GET['order_by'])) {
         $order_by = $_GET['order_by'];
@@ -68,8 +48,29 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $order_by = 'upload-desc';
     }
 
-    $posts = get_posts($searchList, $rating, $order_by_statement, $current_page_number);
-   
+    if (isset($_GET['page'])) {
+        $current_page_number = intval($_GET['page']);
+    } else {
+        $current_page_number = 1;
+    }
+    
+    $result = get_posts($searchList, $current_page_number, true); 
+
+    $posts = $result['posts'];      
+    $total_posts = $result['total_posts'];
+
+
+    $number_of_pages = number_of_pages($total_posts);
+
+    if ($current_page_number > $number_of_pages) {
+        header('Location: main.php?page='. $number_of_pages .'&search=' . $_GET['search']);
+    }
+
+
+    
+
+        
+
 
 } else {
     header("Location: main.php");
@@ -147,14 +148,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 } else {
                     echo "<p>Error: " . htmlspecialchars($mysqli->error) . "</p>";
                 }
-                if ($current_page_number == $number_of_posts) {
+                if ($current_page_number == $number_of_pages && ($total_posts > 0)) {
                     echo "<p>You've reached the end!<br>If you got here from just scrolling I would be concerned...<br><a href='main.php?page=1'>Go Home</a></p>";
                 }
             ?>
-        </div>
-
         
-        </div>
         
         <br>
 
@@ -164,16 +162,16 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
                 $current_page_number = max(1, $current_page_number); 
 
-                if ($current_page_number > $number_of_posts) {
+                if ($current_page_number > $number_of_pages) {
                     echo "<span>
                     <strong> No posts to display! </strong>
                     <p>Why don't you <a href='posts/upload.php'>upload</a> one?</p>";
 
-                } else if ($current_page_number == $number_of_posts && $current_page_number == 1) {
+                } else if ($current_page_number == $number_of_pages && $current_page_number == 1) {
                     echo '<span>
                     <strong> ' . $current_page_number . ' </strong>';
                     
-                } else if ($current_page_number == $number_of_posts) {
+                } else if ($current_page_number == $number_of_pages) {
                     echo '<span>
                     <a href="main.php?page=1">1</a> 
                     ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'"><<</a>
@@ -184,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     echo '<span>
                     <strong> ' . $current_page_number .  '</strong>
                     <a href="main.php?page=' . ($current_page_number + 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'">>></a>
-                    ... <a href="main.php?page=' . ($number_of_posts) . '">'. ($number_of_posts) .'</a>';
+                    ... <a href="main.php?page=' . ($number_of_pages) . '">'. ($number_of_pages) .'</a>';
 
                 } else {
                     echo '<span>
@@ -192,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     ... <a href="main.php?page=' . ($current_page_number - 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'"><<</a>
                     <strong> ' . $current_page_number . ' </strong>
                     <a href="main.php?page=' . ($current_page_number + 1) . '&search='. join("+", $searchList) .'&order_by='. $order_by .'">>></a>
-                    ... <a href="main.php?page=' . ($number_of_posts) . '">'. ($number_of_posts) .'</a>';
+                    ... <a href="main.php?page=' . ($number_of_pages) . '">'. ($number_of_pages) .'</a>';
 
                 }
 
@@ -211,14 +209,30 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
         </div>
 
+        </div>
+
+        
+        </div>
+
         <?php include 'html-parts/footer.php'; ?>
     </body>
 
     <script>
-        function sort_posts(orderValue, searchValue='') {
+        function sort_posts(orderValue, searchValue = '') {
+            const url = new URL(window.location.href);
+            
+            // Set or replace the order_by parameter
+            url.searchParams.set('order_by', orderValue);
+            
+            // Set the search parameter if provided
+            if (searchValue) {
+                url.searchParams.set('search', searchValue);
+            } else {
+                url.searchParams.delete('search'); // Remove if no search value is provided
+            }
 
-            document.location.href = ("main.php?order_by=" + orderValue + "&search=" + searchValue);
-
+            // Redirect to the updated URL
+            document.location.href = url.toString();
         }
     </script>
 </html>

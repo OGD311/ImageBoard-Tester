@@ -85,7 +85,15 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     <p>Post ID: <?= $post['id'] ?></p>
 
                     <?php if (!empty($_SESSION['user_id']) && ($uploader['id'] == $_SESSION['user_id'] || is_admin($_SESSION['user_id']))) : ?>
-                        <a href="edit.php?post_id=<?= $post['id'] ?>">Edit Post</a>
+                        <button class="btn btn-secondary" onclick="location.href='edit.php?post_id=<?= $post['id'] ?>'">Edit Post</button>
+
+                        <form action="delete-post.php" method="post" onsubmit="return confirm('Delete Post?');">
+                            <input type="hidden" name="user_id" value="<?= $uploader['id'] ?>">
+                            <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                            <br>
+
+                            <button  class="btn btn-danger">Delete Post</button>
+                        </form>
                     <?php endif ?>
 
                 </ul>
@@ -97,27 +105,30 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <div class="right-div container-fluid text-center justify-content-center">
             <h1><?= $post['title'] ?></h1>
             <img id="image" class="" src="<?= '/storage/uploads/' . $post['filehash'] . '.' . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>" style="border-width: 1px;">
+                        
+            
+
+            <div id="scalingInfo"></div>
+            <select id="widthSelect">
+                <option value="850">Sample (850 px)</option>
+                <option value="fitWidth">Fit Width</option>
+                <option value="fitHeight">Fit Height</option>
+                <option value="original">Original Size</option>
+            </select>
+            <br>
+
+        
+
+            <?php include '../comments/comment-view.php'; ?>
+            
+            <?php include '../comments/comment-form.php'; ?>
         </div>
 
         
 
     </div>
 
-    <select id="widthSelect">
-        <option value="850">Sample (850 px)</option>
-        <option value="fitWidth">Fit Width</option>
-        <option value="fitHeight">Fit Height</option>
-        <option value="original">Original Size</option>
-    </select>
-
-    <div id="scalingInfo"></div>
-    <br>
-
- 
-
-    <?php include '../comments/comment-view.php'; ?>
     
-    <?php include '../comments/comment-form.php'; ?>
 
     <?php include '../html-parts/footer.php'; ?>
     

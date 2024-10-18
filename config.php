@@ -56,32 +56,13 @@ function get_user_id($username) {
     return $user_id;
 }
 
-function posts_count($column, $likes) {
+
+function total_posts_count() {
     $mysqli = require __DIR__ . "/storage/database.php";
 
     $sql = "SELECT COUNT(*) AS total_posts FROM posts";
 
-    if (!empty($column) && !empty($likes)) {
-        $sql .= " WHERE ";
-        $conditions = [];
-
-        foreach ($likes as $like) {
-            $conditions[] = "$column LIKE ?";
-        }
-
-        $sql .= implode(' AND ', $conditions);
-    }
-
     $stmt = $mysqli->prepare($sql);
-
-    if (!empty($column) && !empty($likes)) {
-        $types = str_repeat('s', count($likes)); 
-        $likeParams = array_map(function($like) {
-            return "%$like%"; 
-        }, $likes);
-        
-        $stmt->bind_param($types, ...$likeParams);
-    }
 
     $stmt->execute();
     $result = $stmt->get_result();
@@ -93,13 +74,10 @@ function posts_count($column, $likes) {
 }
 
 
-
-function number_of_pages($column, $like) {
+function number_of_pages($posts_count) {
     $posts_per_page = $GLOBALS['_POSTS_PER_PAGE'];
 
-    $posts_count = posts_count($column, $like);
-
-    $number_of_pages = ceil($posts_count / $posts_per_page);
+    $number_of_pages = intval(ceil($posts_count / $posts_per_page));
 
     return $number_of_pages;
 }

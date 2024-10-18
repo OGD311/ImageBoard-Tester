@@ -13,16 +13,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if (isset($matches[1])) {
             $rating = ($matches[1]);
-            if ( ! is_numeric($matches[1])) {
+            if (!is_numeric($matches[1])) {
                 $rating = get_rating_value($matches[1]);
             }
-            // Remove the entire rating substring from $searchInput
-            $searchInput = preg_replace('/rating\s*:\s*\'?(\S+?)\'?/', '', $searchInput);
+            
+            $searchInput = preg_replace('/rating\s*:\s*\'?(\S+?)\'?/', 'rating:' . htmlspecialchars($rating) . '', $searchInput);
         }
     }
-    $search = str_replace('rating:' . $rating, '', $searchInput);
-    $search = str_replace(' ', '+', $search);
 
-    header('Location: /core/main.php?search=' . htmlspecialchars($search) .'&rating=' . htmlspecialchars($rating) . '');
+    $search = str_replace(' ', '+', $searchInput);
 
-} 
+    header('Location: /core/main.php?search=' . htmlspecialchars($search));
+    exit(); 
+}

@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
             echo '<div class="post"> <p>';
             echo '<span><strong><a href="../users/user.php?user_id=' . $comment['user_id'] . '">' . htmlspecialchars($comment['username']) . ': </a></strong></span>';
             echo '<span>' . htmlspecialchars($comment['comment']) . ' - </span>';
-            echo '<span>' . date("d/m/y h:i:s a", $comment['posted_at']) . '</span>';
+            echo '<span>' . date("d/m/y h:i a", $comment['posted_at']) . '</span>';
             if (isset($_SESSION['user_id'])) {
                 if ($_SESSION['user_id'] === $comment['user_id'] || is_admin($_SESSION['user_id'])) {
                 echo '
