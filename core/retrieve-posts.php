@@ -5,12 +5,13 @@ function get_posts($search = [], $page = 1, $count = false) {
     if ($page == 0) {
         $page = 1;
     }
-    $joinTags = false;
 
+    $joinTags = false;
+    
     $mysqli = require __DIR__ . "../../storage/database.php";
     $_POSTS_PER_PAGE = $GLOBALS['_POSTS_PER_PAGE'];
 
-    // Base SQL for posts
+    
     $sql = "SELECT p.* FROM posts p";
 
 
@@ -18,6 +19,7 @@ function get_posts($search = [], $page = 1, $count = false) {
 
     foreach ($search as $key => $searchTerm) {
         $negation = false;
+
         if (strpos($searchTerm, '-') === 0) {
             $negation = true;
             $searchTerm = ltrim($searchTerm, '-');
@@ -54,13 +56,13 @@ function get_posts($search = [], $page = 1, $count = false) {
         $sql .= " WHERE " . implode(' AND ', $conditions);
     }
 
-    // Add pagination
+    
     $sql .= " ORDER BY p.uploaded_at DESC
               LIMIT " . $_POSTS_PER_PAGE . " 
               OFFSET " . (($page - 1) * $_POSTS_PER_PAGE) . ";";
 
               
-    // Execute the main query to get posts
+              
     $result = $mysqli->query($sql);
     if (!$result) {
         return [];

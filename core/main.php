@@ -8,12 +8,17 @@ $mysqli = $_DB;
 
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
-
+    
     if (isset($_GET['search'])) {
-        $searchList = (explode('+', $_GET['search']));
+        $searchString = trim($_GET['search']);
+
+        $searchString = str_replace(' ', '+', $searchString);
+
+        $searchList = explode('+', $searchString);
     } else {
         $searchList = [];
     }
+
   
 
     if (isset($_GET['order_by'])) {
