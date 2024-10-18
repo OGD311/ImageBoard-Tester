@@ -184,14 +184,15 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
                 }
 
-                // Select a random post
-                $sql = "SELECT id FROM posts ORDER BY RAND() LIMIT 1;";
-                $result = $mysqli->query($sql);
+                if (total_posts_count() > 0) {
+                    $sql = "SELECT id FROM posts ORDER BY RAND() LIMIT 1;";
+                    $result = $mysqli->query($sql);
 
-                if ($result && $result->num_rows > 0) {
-                    $row = $result->fetch_assoc();
-                    echo '  <a href="/core/posts/view.php?post_id=' . $row['id'] . '">Random Post</a>';
-                } 
+                    if ($result && $result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        echo '  <a href="/core/posts/view.php?post_id=' . $row['id'] . '">Random Post</a>';
+                    } 
+                }
                                
 
                 echo '</span>';

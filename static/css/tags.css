@@ -11,12 +11,6 @@
     margin-right: 1%;
 }
 
-.gap {
-    width: 2%; /* Set the desired width for the gap */
-    background-color: #ecf0f1; /* Example color */
-    text-align: center;
-    line-height: 50px; /* Centering the text vertically */
-}
 
 .right-div {
     width: 100%; /* This will also take up remaining space */
@@ -37,4 +31,21 @@
 
 .left-div li {
     margin-left: 0;   /* Ensure list items don't have extra margin */
+}
+
+
+#addTag {
+    color: green;
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+#removeTag {
+    color: red;
+    cursor: pointer;
+
+    font-weight: bold;
+    
 }

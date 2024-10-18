@@ -9,6 +9,7 @@ require_once 'config.php';
     <title>Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="/static/js/hide-page.js"></script>
+    <?php include 'core/html-parts/header-elems.php' ?>
     <script type="module">
         import'/static/js/cookie.js'; 
     </script>
@@ -19,7 +20,7 @@ require_once 'config.php';
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="border border-black p-4 text-center">
             <p>You must be over the age of 18 and agree to the <a href="#" class="text-blue">terms and conditions</a> to access this page.</p>
-            <button id="agreeBtn" class="btn btn-primary ">
+            <button id="agreeBtn" class="btn btn-success ">
                 I agree to the <a href="#" class="text-white">terms and conditions</a>
             </button>
             <button id="disagreeBtn" class="btn btn-secondary">

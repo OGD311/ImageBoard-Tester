@@ -3,7 +3,6 @@ window.onload = function() {
 };
 
 document.addEventListener('keydown', function(e) {
-    console.log(e.keyCode);
 
     if (e.keyCode === 120) { 
         const currentUrl = window.location.href;

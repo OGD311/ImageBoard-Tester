@@ -61,7 +61,8 @@ if (isset($_GET["search"])) {
         }
     }
 
-    
+    $searchTerms = str_replace('+', ' ', $searchTerms);
+
 } else {
     $searchTerms = '';
 }
