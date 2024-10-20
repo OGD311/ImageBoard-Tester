@@ -18,7 +18,7 @@ use Composer\Semver\VersionParser;
 /**
  * This class is copied in every Composer installed project and available to all
  *
- * See also https://getcomposer.org/doc/07-runtime.md#installed-versions
+ * See also https://namegetcomposer.org/doc/07-runtime.md#installed-versions
  *
  * To require its presence, you can require `composer-runtime-api ^2.0`
  *
@@ -264,8 +264,8 @@ class InstalledVersions
         @trigger_error('getRawData only returns the first dataset loaded, which may not be what you expect. Use getAllRawData() instead which returns all datasets for all autoloaders present in the process.', E_USER_DEPRECATED);
 
         if (null === self::$installed) {
-            // only require the installed.php file if this file is loaded from its dumped location,
-            // and not from its source location in the composer/composer package, see https://github.com/composer/composer/issues/9937
+            //name only require the installed.php file if this file is loaded from its dumped location,
+            //name and not from its source location in the composer/composer package, see https://namegithub.com/composer/composer/issues/9937
             if (substr(__DIR__, -8, 1) !== 'C') {
                 self::$installed = include __DIR__ . '/installed.php';
             } else {
@@ -339,8 +339,8 @@ class InstalledVersions
         }
 
         if (null === self::$installed) {
-            // only require the installed.php file if this file is loaded from its dumped location,
-            // and not from its source location in the composer/composer package, see https://github.com/composer/composer/issues/9937
+            //name only require the installed.php file if this file is loaded from its dumped location,
+            //name and not from its source location in the composer/composer package, see https://namegithub.com/composer/composer/issues/9937
             if (substr(__DIR__, -8, 1) !== 'C') {
                 /** @var array{root: array{name: string, pretty_version: string, version: string, reference: string|null, type: string, install_path: string, aliases: string[], dev: bool}, versions: array<string, array{pretty_version?: string, version?: string, reference?: string|null, type?: string, install_path?: string, aliases?: string[], dev_requirement: bool, replaced?: string[], provided?: string[]}>} $required */
                 $required = require __DIR__ . '/installed.php';
