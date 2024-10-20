@@ -36,8 +36,12 @@ if ($user) {
         ' . htmlspecialchars($user['username']) . '
         </a>
         <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="/core/users/user.php?user_id=' . ($user['id']) . '">Profile</a></li>
-        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="/core/users/user.php?user_id=' . ($user['id']) . '">Profile</a></li> ';
+
+        if (is_admin($user)) {
+            echo '<li><a class="dropdown-item" href="/ext/admin/main.php">Admin</a></li>';
+        }
+    echo '<li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="/core/users/logout.php">Logout</a></li>
         </ul>
     </li>';

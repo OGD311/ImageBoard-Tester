@@ -1,5 +1,6 @@
 *.env
 */uploads/*
+*/thumbnails/*
 *.DS_STORE
-*ext
 
+*/api/*

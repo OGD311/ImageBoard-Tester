@@ -8,11 +8,12 @@ require_once 'config.php';
     <meta charset="UTF-8">
     <title>Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/details.css">
+    <script src="/static/js/add-to-search.js" type="module"></script>
     <script src="/static/js/hide-page.js"></script>
-    <?php include 'core/html-parts/header-elems.php' ?>
-    <script type="module">
-        import'/static/js/cookie.js'; 
-    </script>
+    <script src="/static/js/cookie.js" type="module"></script>
+
 </head>
 
 <body>

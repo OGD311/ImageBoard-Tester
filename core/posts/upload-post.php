@@ -1,6 +1,8 @@
 <?php
 require_once '../../config.php';
 
+require 'compress-image.php';
+
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit("POST request method required");
@@ -74,7 +76,7 @@ $filename = $base . "." . $pathinfo['extension'];
 
 $filehash = md5($_FILES["image"]["name"]);
 
-$destination = $_UPLOADPATH . $filehash . "." . $pathinfo['extension'];
+$destination = $_UPLOADPATH . $filehash . "." . strtolower($pathinfo['extension']);
 
 if ( ! move_uploaded_file($_FILES["image"]["tmp_name"], $destination)) {
     exit("Can't move uploaded file");
@@ -112,6 +114,8 @@ if (! $stmt->prepare($sql)) {
 $stmt->bind_param('sisisiiis' , $title, $user_id, $extension, $filesize, $filehash, $file_height, $file_width, $rating, $uploaded_at);
 
 $stmt->execute();
+
+compress($destination, $_THUMBNAILPATH . $filehash . "-thumb.jpg");
 
 // Redirect to new post
 

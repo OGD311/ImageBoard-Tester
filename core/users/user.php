@@ -77,6 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $userData['username'] ?>'s profile</title>
     <?php include '../html-parts/header-elems.php' ?>
+    <link rel="stylesheet" href="/static/css/ratings.css">
 </head>
 <body>
     <?php include '../html-parts/nav.php'; ?>
@@ -89,10 +90,24 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
             if ($postsData) {
                 foreach ($postsData as $post) {
-                    echo '<div class="card justify-content-center border-2 m-1" style="width: 12rem;">';
-                    echo '<a href="/core/posts/view.php?post_id=' . $post['id'] . '">';
-                    echo '<img class="card-img-top" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain;">';
-                    echo '</a></div>';
+
+                    $apply_blur = '';
+
+                    if ($post['rating'] == 2) {
+                        $apply_blur = 'blur-explicit';
+                    }
+                    
+                    echo '
+                        <div class="card justify-content-center border-2 m-1" style="width: 12rem;">
+                        <a href="/core/posts/view.php?post_id=' . $post['id'] . '">
+                        <img class="card-img-top ' . $apply_blur . '" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain; padding-top: 10px; padding-bottom: 2px;">
+                        </a>
+                        <span style="display: flex; align-items: center; gap: 10px;">
+                            <img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">
+                            <p style="margin: 0;">'. $post['comment_count'] . '</p>
+                            <p style="margin: 0;" class="rating-' . $post['rating'] . '">' . get_rating_text($post['rating'], true) . '</p>
+                        </span>
+                        </div>';
                 }
 
             } elseif (count($postsData) === 0) {
@@ -110,7 +125,12 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             if ($commentsData) {
 
                 foreach ($commentsData as $comment) {
-                    echo "<p><strong>" . htmlspecialchars($comment['comment']) . "</strong> on <a href='/core/posts/view.php?post_id=" . htmlspecialchars($comment['post_id']) . "'>" . "'" . post_title($comment['post_id']) . "'" ."</a> at "  . date("d/m/y h:i:s a", $comment['posted_at']) . "</a></p>";
+                    echo "<p><strong>" . htmlspecialchars($comment['comment']) . 
+                    "</strong> on <a href='/core/posts/view.php?post_id=" . 
+                    htmlspecialchars($comment['post_id']) . "'>" . "'"
+                     . post_title($comment['post_id']) . "'" ."</a> at "  
+                     . date("h:i a", $comment['posted_at']) . " on " 
+                     . date("d/m/y", $comment['posted_at']) . "</p>";
                 }
 
             } elseif (count($commentsData) === 0) {

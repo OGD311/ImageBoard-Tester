@@ -103,28 +103,33 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         </div>
 
 
-        <div id="posts" class=" right-div container-main text-center row justify-content-center">
+        <div id="posts" class="right-div container-main text-center row justify-content-center">
             <?php
                 if ($result) {
                     foreach ($posts as $post) {
-
-                        $apply_blur = '';
-
-                        if ($post['rating'] == 2) {
-                            $apply_blur = 'blur-explicit';
-                        }
-
-                        echo '
-                        <div class="card justify-content-center border-2 m-1" style="width: 12rem;">
-                        <a href="/core/posts/view.php?post_id=' . $post['id'] . '">
-                        <img class="card-img-top ' . $apply_blur . '" src="/storage/uploads/' . htmlspecialchars($post['filehash'] . "." . $post['extension']) . '" alt="Post Image" width=200 height=200 style="object-fit: contain; padding-top: 10px; padding-bottom: 2px;">
-                        </a>
-                        <span style="display: flex; align-items: center; gap: 10px;">
-                            <img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">
-                            <p style="margin: 0;">'. $post['comment_count'] . '</p>
-                            <p style="margin: 0;" class="rating-' . $post['rating'] . '">' . get_rating_text($post['rating'], true) . '</p>
-                        </span>
-                        </div>';
+                        // Determine blur class based on rating
+                        $apply_blur = $post['rating'] == 2 ? 'blur-explicit' : '';
+                        
+                        // Precompute the file hash and image URL
+                        $filehash = htmlspecialchars($post['filehash']);
+                        $imageSrc = "/storage/thumbnails/{$filehash}-thumb.jpg";
+                        
+                        // Create card content using an array
+                        $cardContent = [
+                            '<div class="card justify-content-center border-2 m-1" style="width: 12rem;">',
+                                '<a href="/core/posts/view.php?post_id=' . $post['id'] . '">',
+                                    '<img class="card-img-top ' . $apply_blur . '" src="' . $imageSrc . '" alt="Post Image" width="200" height="200" style="object-fit: contain; padding-top: 10px; padding-bottom: 2px;" loading="lazy">',
+                                '</a>',
+                                '<span style="display: flex; align-items: center; gap: 10px;">',
+                                    '<img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">',
+                                    '<p style="margin: 0;">' . $post['comment_count'] . '</p>',
+                                    '<p style="margin: 0;" class="rating-' . $post['rating'] . '">' . get_rating_text($post['rating'], true) . '</p>',
+                                '</span>',
+                            '</div>'
+                        ];
+                    
+                        // Echo the complete HTML card
+                        echo implode('', $cardContent);
                     }
                 } else {
                     echo "<p>Error: " . htmlspecialchars($mysqli->error) . "</p>";
