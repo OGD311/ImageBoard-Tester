@@ -7,24 +7,30 @@ A simple ImageBoard, written in PHP, based on shimmieV2 and the Gelbooru Concept
   - Login
   - View
   - Delete Account
+    
 - Posts
   - Make
   - View
   - Edit
   - Delete
+    
 - Comments
   - Make
   - View
   - Delete
-- Search (WIP)
+    
+- Search
   - Title
-  - Descriptions (filetype, date, etc)
+  - Descriptions (filetype, date, etc)  (WIP)
   - Ratings
   - Tags
-- Tags (WIP)
-  - Add tags to posts
+  - Autocomplete (Tags only)
+    
+- Tags 
+  - Add tags to posts (WIP)
   - Search by tag
   - Search without tag
+ 
 - Ratings
   - Allows posts to be given ratings (which can be searched against)
   - Posts can be blurred/hidden depending on rating
