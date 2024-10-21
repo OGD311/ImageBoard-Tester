@@ -104,9 +104,23 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
         <div class="right-div container-fluid text-center justify-content-center">
             <h1><?= $post['title'] ?></h1>
-            <img id="image" class="" src="<?= '/storage/uploads/' . $post['filehash'] . '.' . $post['extension'] ?>" height="<?= $post['file_height'] ?>" width="<?= $post['file_width'] ?>" style="border-width: 1px;">
-                        
-            
+            <?php
+                $fileType = $post['extension']; // Assuming extension is already provided in the array
+
+                if (in_array($fileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+                    // Display image
+                    echo '<img id="post" src="' . '/storage/uploads/' . $post['filehash'] . '.' . $fileType . '" height="' . $post['file_height'] . '" width="' . $post['file_width'] . '" style="border-width: 1px;">';
+                } elseif (in_array($fileType, ['mp4', 'webm', 'ogg'])) {
+                    // Display video
+                    echo '<video id="post" controls width="' . $post['file_width'] . '" height="' . $post['file_height'] . '">
+                            <source src="' . '/storage/uploads/' . $post['filehash'] . '.' . $fileType . '" type="video/' . $fileType . '">
+                            Your browser does not support the video tag.
+                        </video>';
+                } else {
+                    echo 'Unsupported file type.';
+                }
+            ?>
+
 
             <div id="scalingInfo"></div>
             <select id="widthSelect">
@@ -135,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     <script>
         const widthSelect = document.getElementById('widthSelect');
-        const image = document.getElementById('image'); // Ensure this matches your image ID
+        const post = document.getElementById('post'); // Ensure this matches your image ID
         const scalingInfo = document.getElementById('scalingInfo');
 
         // Store original dimensions
@@ -151,22 +165,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
             switch(option) {
                 case '850':
-                    image.style.height = '850px';
-                    image.style.width = 'auto';
+                    post.style.height = '850px';
+                    post.style.width = 'auto';
                     updateScalingInfo(850);  
                 case 'fitWidth':
-                    image.style.width = '100%';  
-                    image.style.height = 'auto';
+                    post.style.width = '100%';  
+                    post.style.height = 'auto';
                     scalingInfo.innerHTML = '';  
                     break;
                 case 'fitHeight':
-                    image.style.height = '100%';  
-                    image.style.width = 'auto';
+                    post.style.height = '100%';  
+                    post.style.width = 'auto';
                     scalingInfo.innerHTML = '';  
                     break;
                 case 'original':
-                    image.style.height = '';  
-                    image.style.width = ''; 
+                    post.style.height = '';  
+                    post.style.width = ''; 
                     scalingInfo.innerHTML = '';  
                     break;
             }
@@ -174,8 +188,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
        
         window.onload = function() {
-            image.style.height = '850px';
-            image.style.width = 'auto';
+            post.style.height = '850px';
+            post.style.width = 'auto';
             updateScalingInfo(850);
         };
     </script>

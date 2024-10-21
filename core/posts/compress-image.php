@@ -1,10 +1,19 @@
 <?php 
-function compress($source, $destination) {
+require '../../vendor/autoload.php';
+
+use FFMpeg\FFMpeg;
+use FFMpeg\Format\Video\X264;
+use FFMpeg\Coordinate\Dimension;
+
+function compress($source, $destination) { 
+
     $maxWidth = 800;
     $maxHeight = 640;
     $quality = 50;
 
-    $info = getimagesize($source);
+    $info = new finfo(FILEINFO_MIME_TYPE);
+    $mime_type = $info->file($source);
+
 
     if ($info === false) {
         die("Error: Invalid image file.");
@@ -13,17 +22,28 @@ function compress($source, $destination) {
     if (!is_dir(dirname($destination))) {
         die("Error: Destination folder does not exist.");
     }
- 
+
+    // Handling images
     if ($info['mime'] == 'image/jpeg') {
         $image = imagecreatefromjpeg($source);
     } elseif ($info['mime'] == 'image/gif') {
         $image = imagecreatefromgif($source);
     } elseif ($info['mime'] == 'image/png') {
         $image = imagecreatefrompng($source);
+    } elseif (strpos($info['mime'], 'video/') === 0) { // Check if the MIME type is video
+        // Extract the first frame as a JPEG
+        $ffmpeg = FFMpeg::create();
+        $video = $ffmpeg->open($source);
+        
+        // Extract the first frame
+        $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(0))->save($destination);
+        
+        return $destination; // Return early for video
     } else {
-        die("Error: Unsupported image type.");
+        die("Error: Unsupported image/video type.");
     }
- 
+
+    // Processing images
     $width = imagesx($image);
     $height = imagesy($image);
  
@@ -44,7 +64,6 @@ function compress($source, $destination) {
     $newWidth = round($newWidth);
     $newHeight = round($newHeight);
 
-      
     $newImage = imagecreatetruecolor($newWidth, $newHeight);
  
     if ($info['mime'] == 'image/png' || $info['mime'] == 'image/gif') {

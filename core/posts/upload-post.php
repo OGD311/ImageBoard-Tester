@@ -1,8 +1,11 @@
 <?php
 require_once '../../config.php';
-
 require 'compress-image.php';
 
+
+require '../../vendor/autoload.php';
+use FFMpeg\FFMpeg;
+ 
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit("POST request method required");
@@ -12,9 +15,9 @@ if (empty($_FILES)) {
     exit('$_FILES is empty - is file_uploads enabled in php.ini?');
 }
 
-if ($_FILES["image"]["error"] !== UPLOAD_ERR_OK) {
+if ($_FILES["media"]["error"] !== UPLOAD_ERR_OK) {
 
-    switch ($_FILES["image"]["error"]) {
+    switch ($_FILES["media"]["error"]) {
         case UPLOAD_ERR_PARTIAL:
             exit("File only partially uploaded");
             break;
@@ -45,27 +48,59 @@ if ($_FILES["image"]["error"] !== UPLOAD_ERR_OK) {
 }
 
 
-if ($_FILES["image"]["size"] > 20000000 ) {
+if ($_FILES["media"]["size"] > 20000000 ) {
     exit("File too large (max 20MB)");
 }
 
 $finfo = new finfo(FILEINFO_MIME_TYPE);
 
-$mime_type = $finfo->file($_FILES["image"]["tmp_name"]);
+$mime_type = $finfo->file($_FILES["media"]["tmp_name"]);
 
 
-$mime_types = ["image/gif", "image/png", "image/jpeg"];
+$mime_types = [
+    "image/gif",
+    "image/png",
+    "image/jpeg",
+    "video/mp4",
+    "video/x-msvideo",
+    "video/mpeg",
+    "video/quicktime",
+    "video/x-flv",
+    "video/x-matroska"
+];
 
-if ( ! in_array($_FILES["image"]["type"], $mime_types)) {
+
+if ( ! in_array($_FILES["media"]["type"], $mime_types)) {
     exit("Invalid file type");
+} 
+
+// Check if the file is a video
+if (strpos($mime_type, 'video/') === 0) {
+    // Use PHP-FFMpeg to get details for video files
+    $ffmpeg = FFMpeg::create();
+    $mediaFile = $_FILES["media"]["tmp_name"];
+    
+    // Open the video file
+    $video = $ffmpeg->open($mediaFile);
+    
+    // Get video information
+    $format = $video->getFormat();
+    $dimensions = $video->getStreams()->first()->getDimensions();
+    
+    var_dump($dimensions);
+
+    $file_width = $dimensions->getWidth();
+    $file_height = $dimensions->getHeight();
+    $type = $format->get('format_name'); // Gets the format type, e.g. 'mp4'
+    $attr = ''; // Placeholder for attributes
+    
+} else {
+    // Use getimagesize for non-video files (images)
+    list($file_width, $file_height, $type, $attr) = getimagesize($_FILES["media"]["tmp_name"]);
 }
 
-// Get details of file (put here as putting after filemove conflicts)
-list($file_width, $file_height, $type, $attr) = getimagesize($_FILES["image"]["tmp_name"]); 
-
-
 // Create safe path and hash for file
-$pathinfo = pathinfo($_FILES["image"]["name"]);
+$pathinfo = pathinfo($_FILES["media"]["name"]);
 
 $base = $pathinfo["filename"];
 
@@ -74,11 +109,11 @@ $base = preg_replace("/[^\w-]/", "_", $base);
 
 $filename = $base . "." . $pathinfo['extension'];
 
-$filehash = md5($_FILES["image"]["name"]);
+$filehash = md5($_FILES["media"]["name"]);
 
 $destination = $_UPLOADPATH . $filehash . "." . strtolower($pathinfo['extension']);
 
-if ( ! move_uploaded_file($_FILES["image"]["tmp_name"], $destination)) {
+if ( ! move_uploaded_file($_FILES["media"]["tmp_name"], $destination)) {
     exit("Can't move uploaded file");
 }
 
@@ -89,7 +124,7 @@ $user_id = $_POST['user_id'];
 
 $extension = $pathinfo['extension'];
 
-$filesize = $_FILES["image"]["size"];
+$filesize = $_FILES["media"]["size"];
 
 $rating = $_POST['rating'];
 

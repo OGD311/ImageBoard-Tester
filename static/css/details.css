@@ -28,3 +28,15 @@ html * {
     margin-top: 15%;
     position: absolute;
 }
+
+.extension-tag {
+    position: absolute;
+    top: 80%;
+    left: 65%;
+    background-color: #3b3939; /* Semi-transparent background */
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 2% 5%; /* Space on the sides */
+    box-shadow: 2px 2px 2px grey;
+}

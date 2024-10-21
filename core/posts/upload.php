@@ -40,7 +40,7 @@ if (isset($_SESSION['user_id'])) {
         <input type="text" id="title" name="title" value="">
         <br>
         <label for="image">Image file</label><br>
-        <input type="file" id="image" name="image" accept="image/*" onchange="updateTitle(); loadFile(event);">
+        <input type="file" id="image" name="media" accept="image/*,video/*" onchange="updateTitle(); loadFile(event);">
         <br>
         <label for="rating">Post rating:</label>
         <select id="rating" name="rating">

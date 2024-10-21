@@ -119,13 +119,12 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                             '<div class="card justify-content-center border-2 m-1" style="width: 12rem;">',
                                 '<a href="/core/posts/view.php?post_id=' . $post['id'] . '&search='. $searchString . '">',
                                     '<img class="card-img-top ' . $apply_blur . '" src="' . $imageSrc . '" alt="Post Image" width="200" height="200" style="object-fit: contain; padding-top: 10px; padding-bottom: 2px;" loading="lazy">',
+                                    ($post['extension'] == 'gif' ? '<p class="extension-tag">GIF</p>' : ''),
                                 '</a>',
                                 '<span style="display: flex; align-items: center; gap: 10px;">',
                                     '<img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">',
                                     '<p style="margin: 0;">' . $post['comment_count'] . '</p>',
                                     '<p style="margin: 0;" class="rating-' . $post['rating'] . '">' . get_rating_text($post['rating'], true) . '</p>',
-                                
-                                ($post['extension'] == 'gif' ? '<p style="margin: 0; margin-left: 40%;">[GIF]</p>' : ''),
                                 '</span>',
                             '</div>'
                         ];
