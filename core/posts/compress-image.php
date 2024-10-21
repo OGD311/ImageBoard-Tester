@@ -13,8 +13,7 @@ function compress($source, $destination) {
     if (!is_dir(dirname($destination))) {
         die("Error: Destination folder does not exist.");
     }
-
-    // Create image from source
+ 
     if ($info['mime'] == 'image/jpeg') {
         $image = imagecreatefromjpeg($source);
     } elseif ($info['mime'] == 'image/gif') {
@@ -24,12 +23,10 @@ function compress($source, $destination) {
     } else {
         die("Error: Unsupported image type.");
     }
-
-    // Get original dimensions
+ 
     $width = imagesx($image);
     $height = imagesy($image);
-
-    // Calculate new dimensions
+ 
     $aspectRatio = $width / $height;
     if ($width > $maxWidth || $height > $maxHeight) {
         if ($aspectRatio > 1) {
@@ -47,25 +44,22 @@ function compress($source, $destination) {
     $newWidth = round($newWidth);
     $newHeight = round($newHeight);
 
-    // Create a new blank image with the new dimensions
+      
     $newImage = imagecreatetruecolor($newWidth, $newHeight);
-    // Preserve transparency for PNG and GIF images
+ 
     if ($info['mime'] == 'image/png' || $info['mime'] == 'image/gif') {
         imagealphablending($newImage, false);
         imagesavealpha($newImage, true);
         $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
         imagefill($newImage, 0, 0, $transparent);
     }
-
-    // Resize the original image into the new image
+ 
     imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-    // Save the compressed image to the destination
+ 
     if (!imagejpeg($newImage, $destination, $quality)) {
         die("Error: Failed to write image to destination. Check permissions and path.");
     }
-
-    // Free up memory
+ 
     imagedestroy($image);
     imagedestroy($newImage);
 

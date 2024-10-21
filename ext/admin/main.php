@@ -7,7 +7,9 @@ $mysqli = $_DB;
 
 if (! isset($_SESSION['user_id']) && !is_admin($_SESSION['user_id'])) {
     header('Location: /core/users/login.php');
+    exit();
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -19,11 +21,16 @@ if (! isset($_SESSION['user_id']) && !is_admin($_SESSION['user_id'])) {
 </head>
 <body>
     <h1>Admin Console</h1>
+    <h3>Welcome <?= get_user_name($_SESSION['user_id']) ?></h3>
+    <ul>
 
-    <a href="regenerate-thumbnails.php">Regenerate Thumbnails</a>
+        <li><a href="regenerate-thumbnails.php">Regenerate Thumbnails</a></li>
 
+        <li><a href="recount-tags.php">Recount Tags</a></li>
 
-    <a href="/index.php">Home</a>
+        <li><a href="/index.php">Home</a></li>
+
+    </ul>
     
 </body>
 </html>

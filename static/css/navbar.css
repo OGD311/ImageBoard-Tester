@@ -43,6 +43,12 @@
     background-color: lightcoral !important;
     border-color: darkolivegreen !important;
 }
+
+.navbar {
+    background-color: #CFEE91;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+
+}
 /* .search {
     display:block;
     justify-content: center;

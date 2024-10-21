@@ -2,6 +2,14 @@
 require_once '../../config.php';
 require '../../core/posts/compress-image.php';
 
+session_start();
+
+if (! isset($_SESSION['user_id']) && !is_admin($_SESSION['user_id'])) {
+    header('Location: /core/users/login.php');
+    exit();
+}
+
+
 $contents = scandir($_UPLOADPATH);
 
 foreach ($contents as $item) {

@@ -58,6 +58,21 @@ function get_user_id($username) {
     return $user_id;
 }
 
+function get_user_name($user_id) {
+    $mysqli = require __DIR__ . "/storage/database.php";
+
+    $stmt = $mysqli->prepare("SELECT username FROM users WHERE id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $username = $result->fetch_assoc()['username'];
+    $stmt->close();
+    $mysqli->close();
+
+    return $username;
+}
+
 
 function total_posts_count() {
     $mysqli = require __DIR__ . "/storage/database.php";

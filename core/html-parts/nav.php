@@ -13,7 +13,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 echo '
-<nav class="navbar" style="background-color: #CFEE91">
+<nav class="navbar">
     <div class="container-fluid">
     <ul class="nav nav-pills justify-content-center">
         <li class="nav-item border rounded" ><a class="nav-link" href="/core/main.php">Home</a></li>';
@@ -32,7 +32,7 @@ echo '<li class="nav-item border rounded"><a class="nav-link" href="/core/hide.p
 if ($user) {
     echo '
     <li class="nav-item dropdown border rounded">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         ' . htmlspecialchars($user['username']) . '
         </a>
         <ul class="dropdown-menu">
@@ -68,18 +68,20 @@ if (isset($_GET["search"])) {
     $searchTerms = str_replace('+', ' ', $searchTerms);
 
 } else {
-    $searchTerms = '';
+    $searchTerms = "";
 }
-
 
 echo'
 
 </ul>
 
-<form class="d-flex" role="search" action="/core/search-posts.php" method="post">
-    <input class="form-control me-2" type="search" name="search" placeholder="Search" 
-           value="' . $searchTerms .'" 
+<form class="d-flex dropdown position-relative" role="search" action="/core/search-posts.php" method="post">
+    <input class="form-control me-2 dropdown-toggle" type="search" name="search" id="searchBox" placeholder="Search" 
+           value="'. $searchTerms . '" 
            aria-label="Search">
+
+    <ul id="autocompleteBox" class="dropdown-menu position-absolute h-20 w-20" aria-labelledby="dropdownMenuButton"></ul>
+ 
     <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
 

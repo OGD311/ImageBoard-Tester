@@ -28,7 +28,7 @@ if ($result) {
     echo '<ul>';
     foreach ($tags as $tag) {
         echo '<div class="tag"> <p>';
-        echo '<li><span><a id="addTag" onclick="add_to_search(\'' . htmlspecialchars($tag['name']) . '\', true)">+</a> <a id="removeTag" onclick="add_to_search(\'-' . htmlspecialchars($tag['name']) . '\', false)">-</a></span> ' . htmlspecialchars($tag['name']) . ' (' . htmlspecialchars($tag['count']) . ')</li>';
+        echo '<li><span><a id="addTag" onclick="add_and_search(\'' . htmlspecialchars($tag['name']) . '\', true)">+</a> <a id="removeTag" onclick="add_and_search(\'-' . htmlspecialchars($tag['name']) . '\', false)">-</a></span> ' . htmlspecialchars($tag['name']) . ' (' . htmlspecialchars($tag['count']) . ')</li>';
         echo '</p></div>';
     }
 

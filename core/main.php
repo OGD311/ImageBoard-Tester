@@ -107,17 +107,17 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             <?php
                 if ($result) {
                     foreach ($posts as $post) {
-                        // Determine blur class based on rating
+                        
                         $apply_blur = $post['rating'] == 2 ? 'blur-explicit' : '';
                         
-                        // Precompute the file hash and image URL
+ 
                         $filehash = htmlspecialchars($post['filehash']);
                         $imageSrc = "/storage/thumbnails/{$filehash}-thumb.jpg";
                         
-                        // Create card content using an array
+ 
                         $cardContent = [
                             '<div class="card justify-content-center border-2 m-1" style="width: 12rem;">',
-                                '<a href="/core/posts/view.php?post_id=' . $post['id'] . '">',
+                                '<a href="/core/posts/view.php?post_id=' . $post['id'] . '&search='. $searchString . '">',
                                     '<img class="card-img-top ' . $apply_blur . '" src="' . $imageSrc . '" alt="Post Image" width="200" height="200" style="object-fit: contain; padding-top: 10px; padding-bottom: 2px;" loading="lazy">',
                                 '</a>',
                                 '<span style="display: flex; align-items: center; gap: 10px;">',
@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                             '</div>'
                         ];
                     
-                        // Echo the complete HTML card
+ 
                         echo implode('', $cardContent);
                     }
                 } else {

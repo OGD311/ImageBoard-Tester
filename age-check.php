@@ -7,7 +7,7 @@ require_once 'config.php';
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https:cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/navbar.css">
     <link rel="stylesheet" href="/static/css/details.css">
     <script src="/static/js/add-to-search.js" type="module"></script>
@@ -42,7 +42,7 @@ require_once 'config.php';
 
         window.disagree = function() {
             setCookie('ageCheck', 'disagree'); 
-            window.location.replace('https://www.google.com');
+            window.location.replace('https:www.google.com');
         };
 
         document.getElementById('agreeBtn').onclick = agree;

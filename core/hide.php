@@ -248,7 +248,6 @@
 </style>
 
 <script>
-    // Get the modal
     var popup = document.getElementById("popup");
 
     // Show the popup after the page loads

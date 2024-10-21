@@ -12,7 +12,7 @@ if (isset($_SESSION['user_id'])) {
 <html>
     <head>
         <title>Signup</title>
-        <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js" defer></script>
+        <script src="https:unpkg.com/just-validate@latest/dist/just-validate.production.min.js" defer></script>
         <script src="../static/js/validate.js" defer></script>
         <meta charset="UTF-8">
         <?php include '../html-parts/header-elems.php' ?>        

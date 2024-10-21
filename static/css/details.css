@@ -17,3 +17,10 @@ html * {
     width: 100%;
     border-radius: 20px;
 }
+
+#autocompleteBox {
+    z-index: 1050; /* Ensure it appears above other elements */
+    width: 20;
+    margin-top: 15%;
+    position: absolute;
+}

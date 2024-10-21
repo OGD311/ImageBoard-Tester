@@ -153,27 +153,26 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 case '850':
                     image.style.height = '850px';
                     image.style.width = 'auto';
-                    updateScalingInfo(850); // Use 850 since this is the set width
-                    break;
+                    updateScalingInfo(850);  
                 case 'fitWidth':
-                    image.style.width = '100%'; // Fit to container width
+                    image.style.width = '100%';  
                     image.style.height = 'auto';
-                    scalingInfo.innerHTML = ''; // Clear info for other options
+                    scalingInfo.innerHTML = '';  
                     break;
                 case 'fitHeight':
-                    image.style.height = '100%'; // Fit to container height
+                    image.style.height = '100%';  
                     image.style.width = 'auto';
-                    scalingInfo.innerHTML = ''; // Clear info for other options
+                    scalingInfo.innerHTML = '';  
                     break;
                 case 'original':
-                    image.style.height = ''; // Reset to original size
-                    image.style.width = ''; // Reset to original size
-                    scalingInfo.innerHTML = ''; // Clear info for other options
+                    image.style.height = '';  
+                    image.style.width = ''; 
+                    scalingInfo.innerHTML = '';  
                     break;
             }
         });
 
-        // Set initial size and scaling info on window load
+       
         window.onload = function() {
             image.style.height = '850px';
             image.style.width = 'auto';
