@@ -15,8 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rating = $matches[1];
 
         // If rating is not numeric, convert to the corresponding value using a helper function
-        if (!is_numeric($rating)) {
-            $rating = get_rating_value($rating);
+        if (is_numeric($rating)) {
+            $rating = get_rating_text($rating, true);
         }
 
         // Replace the rating term with its processed value in the search input

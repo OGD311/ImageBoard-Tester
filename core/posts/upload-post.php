@@ -45,8 +45,8 @@ if ($_FILES["image"]["error"] !== UPLOAD_ERR_OK) {
 }
 
 
-if ($_FILES["image"]["size"] > 8388608 ) {
-    exit("File too large (max 1MB)");
+if ($_FILES["image"]["size"] > 20000000 ) {
+    exit("File too large (max 20MB)");
 }
 
 $finfo = new finfo(FILEINFO_MIME_TYPE);

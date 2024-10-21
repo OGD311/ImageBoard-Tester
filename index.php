@@ -25,7 +25,7 @@ $posts_count_array = str_split((string)$posts_count);
         <div class="container-fluid text-center row justify-content-center">
             <?php
             foreach ($posts_count_array as $counter) {
-                echo '<div class="card border-0 justify-content-center" style="width: 12rem;">';
+                echo '<div class="card border-0" style="width: 20%; background: none;">';
                 echo '<img class="" src="/static/images/counter/' . $counter . '.png" alt="Post Image">';
                 echo '</div>';
             }

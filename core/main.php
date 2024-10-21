@@ -124,11 +124,12 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     '<img src="/static/svg/comment-icon.svg" alt="Description of the icon" width="16" height="16">',
                                     '<p style="margin: 0;">' . $post['comment_count'] . '</p>',
                                     '<p style="margin: 0;" class="rating-' . $post['rating'] . '">' . get_rating_text($post['rating'], true) . '</p>',
+                                
+                                ($post['extension'] == 'gif' ? '<p style="margin: 0; margin-left: 40%;">[GIF]</p>' : ''),
                                 '</span>',
                             '</div>'
                         ];
-                    
- 
+              
                         echo implode('', $cardContent);
                     }
                 } else {

@@ -28,6 +28,8 @@ if (! isset($_SESSION['user_id']) && !is_admin($_SESSION['user_id'])) {
 
         <li><a href="recount-tags.php">Recount Tags</a></li>
 
+        <li><a href="sql-test.php">SQL Posts check</a></li>
+
         <li><a href="/index.php">Home</a></li>
 
     </ul>

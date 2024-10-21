@@ -19,7 +19,7 @@ if (!empty($_POST["search"])) {
         if ($result->num_rows > 0) { ?>
                 <?php while ($tag = $result->fetch_assoc()) { ?>
                     <li onclick="remove_from_search('<?php echo htmlspecialchars(($_POST["search"])); ?>'); add_to_search('<?php echo htmlspecialchars($tag['name']); ?>', true);">
-                        <a class="dropdown-item"><?php echo htmlspecialchars($tag["name"]) . ' (' . htmlspecialchars($tag["count"]) . ')'; ?></a>
+                        <a class="dropdown-item"><?php echo str_replace('_', ' ', htmlspecialchars($tag["name"])) . ' (' . htmlspecialchars($tag["count"]) . ')'; ?></a>
                     </li>
                 <?php } ?>
         <?php } else { ?>

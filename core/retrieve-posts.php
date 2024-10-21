@@ -33,13 +33,19 @@ function get_posts($search = [], $page = 1, $count = false) {
 
         // Handle special cases: rating, title, user, and order
         if (preg_match('/rating\s*:\s*\'?(\S+?)\'?/', $term, $matches)) {
-            $conditions[] = "p.rating LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
+            $conditions[] = "p.rating LIKE '" . $mysqli->real_escape_string(get_rating_value(substr($matches[1], 0))) . "'";
         } elseif (preg_match('/title\s*:\s*\'?(.+?)(\+|$)/', $term, $matches)) {
             $conditions[] = "p.title LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
         } elseif (preg_match('/user\s*:\s*\'?(.+?)(\+|$)/', $term, $matches)) {
             $conditions[] = "p.user_id LIKE '" . $mysqli->real_escape_string(get_user_id($matches[1])) . "'";
         } elseif (preg_match('/order\s*:\s*\'?(.+?)(\+|$)/', $term, $matches)) {
             $order_by = $mysqli->real_escape_string($matches[1]);
+        } elseif (preg_match('/ext\s*:\s*\'?(.+?)(\+|$)/', $term, $matches)) {
+            $conditions[] = "p.extension LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
+        } elseif (preg_match('/height\s*:\s*\'?(.+?)(\+|$)/', $term, $matches)) {
+            $conditions[] = "p.file_height LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
+        } elseif (preg_match('/width\s*:\s*\'?(.+?)(\+|$)/', $term, $matches)) {
+            $conditions[] = "p.file_width LIKE '" . $mysqli->real_escape_string($matches[1]) . "'";
         } else {
             // Handle tags
             $joinTags = true;

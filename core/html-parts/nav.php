@@ -16,7 +16,8 @@ echo '
 <nav class="navbar">
     <div class="container-fluid">
     <ul class="nav nav-pills justify-content-center">
-        <li class="nav-item border rounded" ><a class="nav-link" href="/core/main.php">Home</a></li>';
+        <li class="nav-item border rounded"><a class="navbar-brand justify-content-center" href="/index.php"><img src="/static/svg/eye-icon.svg" height=16 width=32></a></li>
+        <li class="nav-item border rounded"><a class="nav-link" href="/core/main.php">Home</a></li>';
 
 if ($user) {
     echo '<li class="nav-item border rounded"><a class="nav-link" href="/core/posts/upload.php">Upload</a></li>';
@@ -80,7 +81,7 @@ echo'
            value="'. $searchTerms . '" 
            aria-label="Search">
 
-    <ul id="autocompleteBox" class="dropdown-menu position-absolute h-20 w-20" aria-labelledby="dropdownMenuButton"></ul>
+    <ul id="autocompleteBox" class="dropdown-menu " aria-labelledby="dropdownMenuButton"></ul>
  
     <button class="btn btn-outline-success" type="submit">Search</button>
 </form>
