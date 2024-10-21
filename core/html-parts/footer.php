@@ -19,6 +19,7 @@ $mysqli->close();
 $statistics = array_merge($statistics, $mysqliStatistics);
 
 echo <<<EOF
+<br>
 <div class="container-fluid justify-content-center text-center footer-statistics">
     <span>
         Total Queries: {$statistics['Questions']}

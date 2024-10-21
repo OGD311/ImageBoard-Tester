@@ -18,6 +18,10 @@ html * {
     border-radius: 20px;
 }
 
+#pages-buttons {
+    padding-top: 2%;
+}
+
 #autocompleteBox {
     z-index: 1050; /* Ensure it appears above other elements */
     width: 20;

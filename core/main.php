@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <br>
 
         <div id="pages-buttons" class="container-fluid text-center row justify-content-center">
-            
+
             <?php
 
                 $current_page_number = max(1, $current_page_number); 

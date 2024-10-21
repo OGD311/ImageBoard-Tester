@@ -5,7 +5,7 @@ $mysqli = $_DB;
 if (!empty($_POST["search"])) {
 
     $searchTerm = $_POST["search"] . '%';
-    $sql = "SELECT name, count FROM tags WHERE name LIKE ? ORDER BY count DESC LIMIT " . $_TAGS_ALL_LIMIT;
+    $sql = "SELECT name, count FROM tags WHERE name LIKE ? AND count != 0 ORDER BY count DESC LIMIT " . $_TAGS_ALL_LIMIT;
 
     $stmt = $mysqli->prepare($sql);
     if ($stmt) {

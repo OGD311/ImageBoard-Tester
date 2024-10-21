@@ -5,10 +5,10 @@
 }
 
 .left-div {
-    width: 15%;
-    /* width: max(15%, max-content); */
+    width: max(15%, fit-content);
     background-color: #91EECF;
     margin-right: 1%;
+    
 }
 
 
@@ -21,6 +21,7 @@
 }
 .left-div p {
     font-size: 15px;
+    text-wrap: wrap;
 }
 
 .left-div ul {
