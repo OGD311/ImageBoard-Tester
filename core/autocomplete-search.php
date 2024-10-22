@@ -1,16 +1,25 @@
 <?php
+
 require_once '../config.php';
 $mysqli = $_DB;
 
-if (!empty($_POST["search"])) {
+$searchArray = (explode(',', $_POST['search']));
 
-    $searchTerm = $_POST["search"] . '%';
-    $sql = "SELECT name, count FROM tags WHERE name LIKE ? AND count != 0 ORDER BY count DESC LIMIT " . $_TAGS_ALL_LIMIT;
+if (!empty($_POST["word"])) {
+    $searchTerm = $_POST["word"] . '%';
+    $sql = "SELECT name, count FROM tags WHERE name LIKE '" . htmlspecialchars($searchTerm) . "' AND count != 0";
+ 
+    if (!empty($searchArray)) { 
+        foreach (array_filter($searchArray) as $key => $term) {
+            $sql .= " AND name NOT LIKE '$term'";
+        }
+    }
+
+    $sql .= " ORDER BY count DESC LIMIT " . $_TAGS_ALL_LIMIT;
+ 
 
     $stmt = $mysqli->prepare($sql);
     if ($stmt) {
-
-        $stmt->bind_param("s", $searchTerm);
 
         $stmt->execute();
 
@@ -18,7 +27,7 @@ if (!empty($_POST["search"])) {
 
         if ($result->num_rows > 0) { ?>
                 <?php while ($tag = $result->fetch_assoc()) { ?>
-                    <li onclick="remove_from_search('<?php echo htmlspecialchars(($_POST["search"])); ?>'); add_to_search('<?php echo htmlspecialchars($tag['name']); ?>', true);">
+                    <li onclick="remove_from_search('<?php echo htmlspecialchars(($_POST["word"])); ?>'); add_to_search('<?php echo htmlspecialchars($tag['name']); ?>', true);">
                         <a class="dropdown-item"><?php echo str_replace('_', ' ', htmlspecialchars($tag["name"])) . ' (' . htmlspecialchars($tag["count"]) . ')'; ?></a>
                     </li>
                 <?php } ?>
