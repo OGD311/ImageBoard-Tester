@@ -21,8 +21,8 @@ foreach ($contents as $item) {
             $filehash = $matches[1];
 
             try {
-                // Compress the image
                 compress($imagePath, $_THUMBNAILPATH . $filehash . "-thumb.jpg");
+                $i += 1;
             } catch (Exception $e) {
                 echo "Error compressing image: " . $e->getMessage() . "\n";
             }
@@ -31,6 +31,7 @@ foreach ($contents as $item) {
             echo "File skipped (not matching MD5 hash pattern or unsupported extension): $item\n";
         }
     }
+
 }
 
 

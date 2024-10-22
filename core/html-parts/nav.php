@@ -77,7 +77,7 @@ echo'
 </ul>
 
 <form class="d-flex dropdown position-relative" role="search" action="/core/search-posts.php" method="post">
-    <input class="form-control me-2 dropdown-toggle" type="search" name="search" id="searchBox" placeholder="Search" 
+    <input class="form-control me-2 dropdown-toggle" autocomplete="off" type="search" name="search" id="searchBox" placeholder="Search" 
            value="'. $searchTerms . '" 
            aria-label="Search">
 

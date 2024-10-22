@@ -46,7 +46,7 @@ if (isset($_SESSION['user_id'])) {
         <select id="rating" name="rating">
             <option value="0">Safe</option>
             <option value="1">Questionable</option>
-            <option value="2">Explicit</option>
+            <option value="2" selected>Explicit</option>
         </select>
 
         <button>Upload</button>

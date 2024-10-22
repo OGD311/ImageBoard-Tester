@@ -4,6 +4,7 @@ require '../../vendor/autoload.php';
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Video\X264;
 use FFMpeg\Coordinate\Dimension;
+use FFMpeg\Coordinate\TimeCode; // Correct import for TimeCode
 
 function compress($source, $destination) { 
 
@@ -14,7 +15,6 @@ function compress($source, $destination) {
     $info = new finfo(FILEINFO_MIME_TYPE);
     $mime_type = $info->file($source);
 
-
     if ($info === false) {
         die("Error: Invalid image file.");
     }
@@ -24,19 +24,19 @@ function compress($source, $destination) {
     }
 
     // Handling images
-    if ($info['mime'] == 'image/jpeg') {
+    if ($mime_type == 'image/jpeg') {
         $image = imagecreatefromjpeg($source);
-    } elseif ($info['mime'] == 'image/gif') {
+    } elseif ($mime_type == 'image/gif') {
         $image = imagecreatefromgif($source);
-    } elseif ($info['mime'] == 'image/png') {
+    } elseif ($mime_type == 'image/png') {
         $image = imagecreatefrompng($source);
-    } elseif (strpos($info['mime'], 'video/') === 0) { // Check if the MIME type is video
+    } elseif (strpos($mime_type, 'video/') === 0) { // Check if the MIME type is video
         // Extract the first frame as a JPEG
         $ffmpeg = FFMpeg::create();
         $video = $ffmpeg->open($source);
         
         // Extract the first frame
-        $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(0))->save($destination);
+        $video->frame(TimeCode::fromSeconds(0))->save($destination);
         
         return $destination; // Return early for video
     } else {
@@ -46,7 +46,7 @@ function compress($source, $destination) {
     // Processing images
     $width = imagesx($image);
     $height = imagesy($image);
- 
+
     $aspectRatio = $width / $height;
     if ($width > $maxWidth || $height > $maxHeight) {
         if ($aspectRatio > 1) {
@@ -65,20 +65,20 @@ function compress($source, $destination) {
     $newHeight = round($newHeight);
 
     $newImage = imagecreatetruecolor($newWidth, $newHeight);
- 
-    if ($info['mime'] == 'image/png' || $info['mime'] == 'image/gif') {
+
+    if ($mime_type == 'image/png' || $mime_type == 'image/gif') {
         imagealphablending($newImage, false);
         imagesavealpha($newImage, true);
         $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
         imagefill($newImage, 0, 0, $transparent);
     }
- 
+
     imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
- 
+
     if (!imagejpeg($newImage, $destination, $quality)) {
         die("Error: Failed to write image to destination. Check permissions and path.");
     }
- 
+
     imagedestroy($image);
     imagedestroy($newImage);
 

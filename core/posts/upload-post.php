@@ -102,6 +102,10 @@ if (strpos($mime_type, 'video/') === 0) {
 // Create safe path and hash for file
 $pathinfo = pathinfo($_FILES["media"]["name"]);
 
+if ($pathinfo['extension'] == 'JPEG') {
+    $pathinfo['extension'] = 'jpg';
+}
+
 $base = $pathinfo["filename"];
 
 $base = preg_replace("/[^\w-]/", "_", $base);
@@ -122,7 +126,7 @@ $title = $_POST['title'];
 
 $user_id = $_POST['user_id'];
 
-$extension = $pathinfo['extension'];
+$extension = strtolower($pathinfo['extension']);
 
 $filesize = $_FILES["media"]["size"];
 
@@ -154,7 +158,7 @@ compress($destination, $_THUMBNAILPATH . $filehash . "-thumb.jpg");
 
 // Redirect to new post
 
-$sql = sprintf("SELECT id FROM posts WHERE filehash = '%s'", $filehash);
+$sql = sprintf("SELECT id FROM posts WHERE filehash = '%s' AND uploaded_at = '%s'", $filehash, $uploaded_at);
 
 $result = $mysqli->query($sql);
 
