@@ -1,5 +1,5 @@
 # ImageBoard
-A simple ImageBoard, written in PHP, based on shimmieV2 and the Gelbooru Concept
+A simple ImageBoard, written in PHP, based on shimmieV2
 
 ## Features
 - Accounts
