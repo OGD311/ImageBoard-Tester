@@ -30,6 +30,8 @@ if (! isset($_SESSION['user_id']) && !is_admin($_SESSION['user_id'])) {
 
         <li><a href="sql-test.php">SQL Posts check</a></li>
 
+        <li><a href="shuffle-post-ids.php">Shuffle Post IDs</a></li>
+
         <li><a href="/index.php">Home</a></li>
 
     </ul>

@@ -1,7 +1,14 @@
 <?php
 require_once '../../config.php';
 
+session_start();
+
 $mysqli = $_DB;
+
+if (! isset($_SESSION['user_id']) && !is_admin($_SESSION['user_id'])) {
+    header('Location: /core/users/login.php');
+    exit();
+}
 
 // Loop 1 million times
 for ($i = 1; $i <= 1000000; $i++) {
