@@ -109,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
                 if (in_array($fileType, ['jpg', 'jpeg', 'png', 'gif'])) {
                     // Display image
-                    echo '<img id="post" src="' . '/storage/uploads/' . $post['filehash'] . '.' . $fileType . '" height="' . $post['file_height'] . '" width="' . $post['file_width'] . '" style="border-width: 1px;">';
+                    echo '<img id="post" src="' . '/storage/uploads/' . $post['filehash'] . '.' . $fileType . '"style="border-width: 1px;">';
                 } elseif (in_array($fileType, ['mp4', 'webm', 'ogg'])) {
                     // Display video
                     echo '<video id="post" controls width="' . $post['file_width'] . '" height="' . $post['file_height'] . '">
@@ -124,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
             <div id="scalingInfo"></div>
             <select id="widthSelect">
-                <option value="850">Sample (850 px)</option>
+                <option value="sample" id='sample'>Sample 850px</option>
                 <option value="fitWidth">Fit Width</option>
                 <option value="fitHeight">Fit Height</option>
                 <option value="original">Original Size</option>
@@ -147,54 +147,60 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 <?php include '../html-parts/footer.php'; ?>
 
 <script>
-        const widthSelect = document.getElementById('widthSelect');
-        const post = document.getElementById('post'); // Ensure this matches your image ID
-        const scalingInfo = document.getElementById('scalingInfo');
+    const widthSelect = document.getElementById('widthSelect');
+    const sampleOption = document.getElementById('sample');
+    const post = document.getElementById('post'); // Ensure this matches your image ID
+    const scalingInfo = document.getElementById('scalingInfo');
 
-        // Store original dimensions
-        const originalWidth = <?= $post['file_width'] ?>;
+    // Store original dimensions
+    const originalWidth = <?= $post['file_width'] ?>;
 
-        function updateScalingInfo(currentWidth) {
-            const percentage = Math.min(((currentWidth / originalWidth) * 100).toFixed(0), 100);
-            scalingInfo.innerHTML = `Viewing sample resized to ${percentage}% of original size.`;
+    function updateScalingInfo(currentWidth) {
+        const percentage = Math.min(((currentWidth / originalWidth) * 100).toFixed(0), 100);
+        scalingInfo.innerHTML = `Viewing sample resized to ${percentage}% of original size.`;
+        sampleOption.innerHTML = "Sample: " + post.clientWidth+ 'px';
+        console.log(post.clientWidth);
+    }
+
+    widthSelect.addEventListener('change', function() {
+        const option = this.value;
+        console.log(option);
+
+        switch(option) {
+            case 'sample':
+                post.classList.add('image-sample');
+                updateScalingInfo(post.clientWidth); 
+                break;
+            case 'fitWidth':
+                post.classList.remove('image-sample');
+                post.style.height = 'auto';  
+                post.style.width = '100%'; 
+                post.style.objectFit = 'contain';
+                scalingInfo.innerHTML = ''; 
+                break;
+            case 'fitHeight':
+                post.classList.remove('image-sample');
+                post.style.height = '100%';  
+                post.style.width = 'auto';
+                post.style.objectFit = 'contain';
+                scalingInfo.innerHTML = '';  
+                break;
+            case 'original':
+                post.classList.remove('image-sample');
+                post.style.height = '';  
+                post.style.width = ''; 
+                scalingInfo.innerHTML = '';  
+                break;
         }
+    });
 
-        widthSelect.addEventListener('change', function() {
-            const option = this.value;
-            console.log(option);
+    window.onload = function() {
+        widthSelect.value = 'sample';  // Set the new value
+        widthSelect.dispatchEvent(new Event('change'));
+    };
 
-            switch(option) {
-                case '850':
-                    post.style.height = '850px';
-                    post.style.width = '850px';
-                    post.style.objectFit = 'contain';
-                    updateScalingInfo(850);  
-                case 'fitWidth':
-                    post.style.height = 'auto';  
-                    post.style.width = '100%'; 
-                    post.style.objectFit = 'contain';
-                    scalingInfo.innerHTML = ''; 
-                    break;
-                case 'fitHeight':
-                    post.style.height = '100%';  
-                    post.style.width = 'auto';
-                    post.style.objectFit = 'contain';
-                    scalingInfo.innerHTML = '';  
-                    break;
-                case 'original':
-                    post.style.height = '';  
-                    post.style.width = ''; 
-                    scalingInfo.innerHTML = '';  
-                    break;
-            }
-        });
+    window.onresize = widthSelect.dispatchEvent(new Event('change'));
+</script>
 
-       
-        window.onload = function() {
-            post.style.height = '850px';
-            post.style.width = 'auto';
-            updateScalingInfo(850);
-        };
-    </script>
     
 </html>

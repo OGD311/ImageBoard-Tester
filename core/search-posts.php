@@ -3,7 +3,7 @@
 require_once '../config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $searchInput = $_POST['search'] ?? '';
+    $searchInput = strtolower($_POST['search']) ?? '';
 
     // Clean up any trailing or unnecessary dashes
     if (str_contains($searchInput, '-')) {

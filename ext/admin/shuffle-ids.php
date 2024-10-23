@@ -24,15 +24,32 @@ $mysqli->query("
     SET posts.id = OrderedPosts.new_id;
 ");
 
+// Update tags and reassign IDs
+$mysqli->query("
+    UPDATE tags
+    JOIN (
+        SELECT id AS old_id, ROW_NUMBER() OVER (ORDER BY id) AS new_id
+        FROM tags
+    ) AS OrderedTags
+    ON tags.id = OrderedTags.old_id
+    SET tags.id = OrderedTags.new_id;
+");
+
 // Update post_tags based on new post IDs
 $mysqli->query("
     UPDATE post_tags
     JOIN (
-        SELECT id AS old_id, ROW_NUMBER() OVER (ORDER BY id) AS new_id
+        SELECT id AS old_post_id, ROW_NUMBER() OVER (ORDER BY id) AS new_post_id
         FROM posts
     ) AS OrderedPosts
-    ON post_tags.post_id = OrderedPosts.old_id
-    SET post_tags.post_id = OrderedPosts.new_id;
+    ON post_tags.post_id = OrderedPosts.old_post_id
+    JOIN (
+        SELECT id AS old_tag_id, ROW_NUMBER() OVER (ORDER BY id) AS new_tag_id
+        FROM tags
+    ) AS OrderedTags
+    ON post_tags.tag_id = OrderedTags.old_tag_id
+    SET post_tags.post_id = OrderedPosts.new_post_id,
+        post_tags.tag_id = OrderedTags.new_tag_id;
 ");
 
 // Update comments based on new post IDs

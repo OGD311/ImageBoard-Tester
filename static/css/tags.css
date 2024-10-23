@@ -5,7 +5,7 @@
 }
 
 .left-div {
-    width: max(15%, fit-content);
+    width: 15%;
     background-color: #91EECF;
     margin-right: 1%;
     
@@ -22,8 +22,8 @@
     padding-left: 2px;
 }
 .left-div p {
-    font-size: 15px;
-    text-wrap: wrap;
+    font-size: 15px; 
+    text-wrap: pretty;
 }
 
 .left-div ul {

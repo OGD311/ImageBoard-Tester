@@ -59,11 +59,12 @@ if (isset($_GET["search"])) {
     if (str_contains($searchTerms, 'rating')) {
         preg_match('/rating\s*:\s*\'?(\S+?)\'?/', $searchTerms, $matches);
         
-        if (isset($matches[1])) {
+        if (isset($matches[1]) && is_numeric($matches[1])) {
             $rating = strtolower(get_rating_text($matches[1], true));
-            
-            $searchTerms = preg_replace('/rating\s*:\s*\'?(.+?)(\+|$)/', 'rating:' . $rating . ' ', $searchTerms);
+        } elseif (isset($matches[1]) && is_string($matches[1])) {
+            $rating = strtolower(substr($matches[1], 0, 1));
         }
+        $searchTerms = preg_replace('/rating\s*:\s*\'?(.+?)(\+|$)/', 'rating:' . $rating . ' ', $searchTerms);
     }
 
     $searchTerms = str_replace('+', ' ', $searchTerms);

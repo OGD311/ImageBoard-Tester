@@ -93,3 +93,9 @@ html * {
 .user-form input:focus {
     transition: background-color 0.1s linear, border-color 0.1s linear, color 0.1s linear, box-shadow 0.1s linear, transform 0.1s ease;
 }
+
+
+.image-sample {
+    width: min(850px, 75%);
+    height: min(850px, 75%);
+}

@@ -23,6 +23,30 @@ for ($i = 1; $i <= 1000000; $i++) {
     }
     
     $stmt->execute();
+
+    $sql = "INSERT INTO `tags` (`id`, `name`, `count`, `created_at`) 
+        VALUES (NULL, 'test$i', '0', " . time() . ");\n";
+
+    
+    $stmt = $mysqli->stmt_init();
+    
+    if (! $stmt->prepare($sql)) {
+        die("SQL Error " . $mysqli->error);
+    }
+    
+    $stmt->execute();
+
+    $sql = "INSERT INTO post_tags (post_id, tag_id)
+        VALUES (FLOOR(1 + RAND() * 20000), FLOOR(1 + RAND() * 15000));\n";
+
+    
+    $stmt = $mysqli->stmt_init();
+    
+    if (! $stmt->prepare($sql)) {
+        die("SQL Error " . $mysqli->error);
+    }
+    
+    $stmt->execute();
 }
 
 
