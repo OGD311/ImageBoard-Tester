@@ -1,5 +1,8 @@
 import { getCookie } from './cookie.js';
-
-if (getCookie("ageCheck") !== "agree") {
-    window.location.href = "/age-check.php";
+ 
+const currentUrl = window.location.pathname;  
+const ageCheckPage = '/age-check.php';
+ 
+if (getCookie("ageCheck") !== "agree" && currentUrl !== ageCheckPage) { 
+    window.location.href = ageCheckPage;
 }

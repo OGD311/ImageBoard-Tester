@@ -16,7 +16,7 @@ echo '
 <nav class="navbar">
     <div class="container-fluid">
     <ul class="nav nav-pills justify-content-center">
-        <li class="nav-item border rounded"><a class="navbar-brand justify-content-center" href="/index.php"><img src="/static/svg/eye-icon.svg" height=16 width=32></a></li>
+        <li class="nav-item border rounded d-flex justify-content-center align-items-center"><a class="navbar-brand justify-content-center" href="/index.php"><img src="/static/svg/site-icon.svg" height=16 width=16></a></li>
         <li class="nav-item border rounded"><a class="nav-link" href="/core/main.php">Home</a></li>';
 
 if ($user) {

@@ -69,6 +69,9 @@ $mysqli->query("SET foreign_key_checks = 1");
 $maxId = $mysqli->query("SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM posts")->fetch_assoc()['next_id'];
 $mysqli->query("ALTER TABLE posts AUTO_INCREMENT = $maxId");
 
+$maxId = $mysqli->query("SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM tags")->fetch_assoc()['next_id'];
+$mysqli->query("ALTER TABLE tags AUTO_INCREMENT = $maxId");
+
 // Redirect to main page
 header('Location: main.php');
 exit();
