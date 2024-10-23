@@ -43,7 +43,7 @@ if ($user) {
             echo '<li><a class="dropdown-item" href="/ext/admin/main.php">Admin</a></li>';
         }
     echo '<li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="/core/users/logout.php">Logout</a></li>
+        <li><a class="dropdown-item" href="../core/users/logout.php">Logout</a></li>
         </ul>
     </li>';
 }

@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <head>
         <title>Login</title>
         <meta charset="UTF-8">
-        <?php include '../html-parts/header-elems.php' ?>
+        <?php include '../html-parts/header-elems.php' ?> 
     </head>
 
     <body>
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <h1>Login</h1>
 
-        <form method='post'>
+        <form method='post' class="user-form">
             
             <label for="username">Username</label>
             <input type="text" id="username" name="username" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>">
@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="password" id="password" name="password">
             
             <button>Login</button>
+
 
         </form>
 

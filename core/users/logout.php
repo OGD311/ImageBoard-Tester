@@ -1,15 +1,16 @@
 <?php
 require_once '../../config.php';
 
+session_start();
+
 if (! isset($_SESSION['user_id'])) {
-    header('Location: ../../main.php');
+    header('Location: ../main.php');
     exit();
 }
 
-session_start();
-
 session_destroy();
 
-header('Location: ../main.php');
 
+
+header('Location: ../../index.php');
 exit;

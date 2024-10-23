@@ -24,7 +24,7 @@ if (isset($_SESSION['user_id'])) {
 
         <h1>Signup</h1>
 
-        <form action="process-signup.php" method="post" id="signup">
+        <form action="process-signup.php" class="user-form" method="post" id="signup">
             <div>
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username">
@@ -45,6 +45,7 @@ if (isset($_SESSION['user_id'])) {
 
 
         <p>Have an account? <a href='users/login.php'>Login</a></p>
-        <?php include '../html-parts/footer.php'; ?>
+        
     </body>
+    <?php include '../html-parts/footer.php'; ?>
 </html>

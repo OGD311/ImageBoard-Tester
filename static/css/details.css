@@ -4,6 +4,10 @@ body {
     background-color: lightgreen;
 }
 
+body h1 {
+    margin-left: 0.2em;
+}
+
 html * {
     color: #3b3939;
 }
@@ -39,4 +43,53 @@ html * {
     text-align: center;
     padding: 2% 5%; /* Space on the sides */
     box-shadow: 2px 2px 2px grey;
+}
+
+
+.user-form {
+    display: block;
+    margin-top: 0em;
+    margin-left: 1em;
+    unicode-bidi: isolate;
+    word-wrap: break-word;
+}
+
+.user-form input {
+    color: #1d1d1d; 
+    background-color: #efefef; 
+    font-family: inherit;
+    font-size: inherit;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+
+    display: block;
+}
+
+.user-form label {
+    vertical-align: middle;
+    margin-bottom: 4px;
+    display: inline-block;
+}
+
+.user-form button {
+    color: #1d1d1d; 
+    background-color: #d0cfcf;
+    font-family: inherit;
+    font-size: inherit;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.user-form input:focus {
+    transition: background-color 0.1s linear, border-color 0.1s linear, color 0.1s linear, box-shadow 0.1s linear, transform 0.1s ease;
 }

@@ -141,13 +141,12 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         
 
     </div>
+  
+</body>
 
-    
+<?php include '../html-parts/footer.php'; ?>
 
-    <?php include '../html-parts/footer.php'; ?>
-    
-
-    <script>
+<script>
         const widthSelect = document.getElementById('widthSelect');
         const post = document.getElementById('post'); // Ensure this matches your image ID
         const scalingInfo = document.getElementById('scalingInfo');
@@ -162,20 +161,24 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
         widthSelect.addEventListener('change', function() {
             const option = this.value;
+            console.log(option);
 
             switch(option) {
                 case '850':
                     post.style.height = '850px';
-                    post.style.width = 'auto';
+                    post.style.width = '850px';
+                    post.style.objectFit = 'contain';
                     updateScalingInfo(850);  
                 case 'fitWidth':
-                    post.style.width = '100%';  
-                    post.style.height = 'auto';
-                    scalingInfo.innerHTML = '';  
+                    post.style.height = 'auto';  
+                    post.style.width = '100%'; 
+                    post.style.objectFit = 'contain';
+                    scalingInfo.innerHTML = ''; 
                     break;
                 case 'fitHeight':
                     post.style.height = '100%';  
                     post.style.width = 'auto';
+                    post.style.objectFit = 'contain';
                     scalingInfo.innerHTML = '';  
                     break;
                 case 'original':
@@ -193,7 +196,5 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             updateScalingInfo(850);
         };
     </script>
-
-
-
-</body>
+    
+</html>
