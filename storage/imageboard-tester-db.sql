@@ -1,33 +1,13 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: localhost
--- Generation Time: Oct 06, 2024 at 06:28 PM
--- Server version: 8.0.39
--- PHP Version: 8.2.12
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `imageboard-tester-db`
---
 CREATE DATABASE IF NOT EXISTS `imageboard-tester-db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `imageboard-tester-db`;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `comments`
---
 
 CREATE TABLE `comments` (
   `id` int NOT NULL,
@@ -36,33 +16,7 @@ CREATE TABLE `comments` (
   `comment` text NOT NULL,
   `posted_at` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Triggers `comments`
---
-DELIMITER $$
-CREATE TRIGGER `after_comment_delete` AFTER DELETE ON `comments` FOR EACH ROW BEGIN
-    UPDATE posts
-    SET comment_count = comment_count - 1
-    WHERE id = OLD.post_id;
-END
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `after_comment_insert` AFTER INSERT ON `comments` FOR EACH ROW BEGIN
-    UPDATE posts
-    SET comment_count = comment_count + 1
-    WHERE id = NEW.post_id;
-END
-$$
-DELIMITER ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `posts`
---
-
+ 
 CREATE TABLE `posts` (
   `id` int NOT NULL,
   `title` text NOT NULL,
@@ -72,16 +26,25 @@ CREATE TABLE `posts` (
   `filehash` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `file_height` int NOT NULL,
   `file_width` int NOT NULL,
+  `rating` int NOT NULL DEFAULT '2',
   `comment_count` int NOT NULL DEFAULT '0',
   `uploaded_at` int NOT NULL,
   `updated_at` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
+CREATE TABLE `post_tags` (
+  `post_id` int NOT NULL,
+  `tag_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Table structure for table `users`
---
+
+
+CREATE TABLE `tags` (
+  `id` int NOT NULL,
+  `name` text NOT NULL,
+  `count` int NOT NULL DEFAULT '0',
+  `created_at` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `users` (
   `id` int NOT NULL,
@@ -91,73 +54,53 @@ CREATE TABLE `users` (
   `created_at` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `comments`
---
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user` (`user_id`),
   ADD KEY `fk_post` (`post_id`);
 
---
--- Indexes for table `posts`
---
 ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `uploader` (`user_id`);
 
---
--- Indexes for table `users`
---
+ALTER TABLE `post_tags`
+  ADD PRIMARY KEY (`post_id`,`tag_id`),
+  ADD KEY `tag_id` (`tag_id`);
+
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`(255));
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `comments`
---
 ALTER TABLE `comments`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `posts`
---
 ALTER TABLE `posts`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `users`
---
+ALTER TABLE `tags`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `users`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `comments`
---
 ALTER TABLE `comments`
   ADD CONSTRAINT `fk_post` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `post` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
   ADD CONSTRAINT `user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
---
--- Constraints for table `posts`
---
 ALTER TABLE `posts`
   ADD CONSTRAINT `uploader` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-COMMIT;
 
+ALTER TABLE `post_tags`
+  ADD CONSTRAINT `post_tags_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `post_tags_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE;
+ 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

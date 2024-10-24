@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
             echo '<span>' . htmlspecialchars($comment['comment']) . ' - </span>';
             echo '<span>' . date("d/m/y h:i a", $comment['posted_at']) . '</span>';
             if (isset($_SESSION['user_id'])) {
-                if ($_SESSION['user_id'] === $comment['user_id'] || is_admin($_SESSION['user_id'])) {
+                if ($_SESSION['user_id'] == $comment['user_id'] || is_admin($_SESSION['user_id'])) {
                 echo '
                         <form action="../comments/delete-comment.php" method="post" onsubmit="return confirm(\'Delete comment?\');"">
                             <input type="hidden" name="user_id" value="' . htmlspecialchars($comment['user_id']) . '">
