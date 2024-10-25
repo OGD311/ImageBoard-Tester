@@ -26,16 +26,17 @@ if (isset($GLOBALS['_SITE_DOWNTIME_MESSAGE'])) {
 
     <body>
 
-        <h1>Site is down</h1>
-        <h3>Check back later</h3>
+        <div class="container d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+            <h1>Site is down</h1>
+            <h3>Check back later</h3>
 
-        <?php
-            if ($siteDownMessage) {
-                echo '<h4>' . $siteDownMessage . '</h4>';
-            }
- 
-        ?>
-
+            <?php
+                if ($siteDownMessage) {
+                    echo '<h4>' . $siteDownMessage . '</h4>';
+                }
+    
+            ?>
+        <div>
 
 
     </body>
