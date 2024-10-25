@@ -1,15 +1,25 @@
 <?php
-
+// File Links 
 $GLOBALS['_DB'] = require __DIR__ . "/storage/database.php";
 
 $GLOBALS['_UPLOADPATH'] = __DIR__ . "/storage/uploads/";
 
 $GLOBALS['_THUMBNAILPATH'] = __DIR__ . "/storage/thumbnails/";
 
-$GLOBALS['_POSTS_PER_PAGE'] = 45;
 
+
+// Admin Controls
+$GLOBALS['_ALLOW_UPLOADS'] = true;
+$GLOBALS['_ALLOW_SIGNUPS'] = true;
+$GLOBALS['_SITE_DOWNTIME'] = false;
+$GLOBALS['_SITE_DOWNTIME_MESSAGE'] = '';
+
+$GLOBALS['_POSTS_PER_PAGE'] = 45;
 $GLOBALS['_TAGS_ALL_LIMIT'] = 16;
 
+
+
+// General functions
 
 function is_admin($user_id) {
     $mysqli = require __DIR__ . "/storage/database.php";

@@ -1,5 +1,5 @@
 <?php
-require_once '../../config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 session_start();
 
@@ -98,10 +98,10 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     <br>
     <a href="/core/posts/view.php?post_id=<?= $post['id'] ?>" class="btn btn-secondary">Close</a>
-
-
-
-
-    <?php include '../html-parts/footer.php'; ?>
+ 
     
 </body>
+
+    <?php include '../html-parts/footer.php'; ?>
+
+</html>

@@ -1,5 +1,5 @@
 <?php
-require_once '../../config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 $mysqli = $_DB; 
 if ($_SERVER['REQUEST_METHOD'] === "GET") {

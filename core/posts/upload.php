@@ -1,5 +1,5 @@
 <?php
-require_once '../../config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 session_start();
 
@@ -32,29 +32,39 @@ if (isset($_SESSION['user_id'])) {
 <body>
     <?php include '../html-parts/nav.php'; ?>
 
-    <form class="container-fluid" action="upload-post.php" method="post" enctype="multipart/form-data">
+    <h1>Upload</h1>
 
-        <!-- <input type="hidden" name="MAX_FILE_SIZE" value="1048576"> -->
-        <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-        <label for="title">Post title</label><br>
-        <input type="text" id="title" name="title" value="">
-        <br>
-        <label for="image">Image file</label><br>
-        <input type="file" id="image" name="media" accept="image/*,video/*" onchange="updateTitle(); loadFile(event);">
-        <br>
-        <label for="rating">Post rating:</label>
-        <select id="rating" name="rating">
-            <option value="0">Safe</option>
-            <option value="1">Questionable</option>
-            <option value="2" selected>Explicit</option>
-        </select>
+        <?php
 
-        <button>Upload</button>
+            if ($GLOBALS['_ALLOW_UPLOADS']){
+                echo '
+                    <form class="container-fluid" action="upload-post.php" method="post" enctype="multipart/form-data">
 
-    </form>
+                       
+                        <input type="hidden" name="user_id" value="' . $user["id"] . '">
+                        <label for="title">Post title</label><br>
+                        <input type="text" id="title" name="title" value="">
+                        <br>
+                        <label for="image">Image file</label><br>
+                        <input type="file" id="image" name="media" accept="image/*,video/*" onchange="updateTitle(); loadFile(event);">
+                        <br>
+                        <label for="rating">Post rating:</label>
+                        <select id="rating" name="rating">
+                            <option value="0">Safe</option>
+                            <option value="1">Questionable</option>
+                            <option value="2" selected>Explicit</option>
+                        </select>
 
-    <img id="output" width=400 height=400 style="object-fit: contain;"/>
+                        <button>Upload</button>
 
+                    </form>
+
+                    <img id="output" width=400 height=400 style="object-fit: contain;"/>';
+            
+            } else {
+                echo '<p>Uploads are disabled at this time</p>';
+            }
+        ?>
 
     <script>
         function updateTitle() {

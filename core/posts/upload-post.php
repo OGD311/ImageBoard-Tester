@@ -1,14 +1,20 @@
 <?php
-require_once '../../config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 require 'compress-image.php';
 
 
 require '../../vendor/autoload.php';
 use FFMpeg\FFMpeg;
+
+if (! $GLOBALS['_ALLOW_UPLOADS']) {
+    header('Location: upload.php');
+    exit();
+}
  
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    exit("POST request method required");
+    header('Location: upload.php');
+    exit();
 }
 
 if (empty($_FILES)) {

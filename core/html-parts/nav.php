@@ -1,4 +1,5 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php'; 
 
 if (isset($_SESSION['user_id'])) {
     
@@ -20,12 +21,15 @@ echo '
         <li class="nav-item border rounded"><a class="nav-link" href="/core/main.php">Home</a></li>';
 
 if ($user) {
-    echo '<li class="nav-item border rounded"><a class="nav-link" href="/core/posts/upload.php">Upload</a></li>';
+    if ($GLOBALS['_ALLOW_UPLOADS']) {
+        echo '<li class="nav-item border rounded"><a class="nav-link" href="/core/posts/upload.php">Upload</a></li>';
+    }
 
 } else {
-    echo '
-    <li class="nav-item border rounded"><a class="nav-link" href="/core/users/login.php">Login</a></li>
-    <li class="nav-item border rounded"><a class="nav-link" href="/core/users/signup.php">Register</a></li>';
+    echo '<li class="nav-item border rounded"><a class="nav-link" href="/core/users/login.php">Login</a></li>';
+    if ($GLOBALS['_ALLOW_SIGNUPS']) {
+        echo '<li class="nav-item border rounded"><a class="nav-link" href="/core/users/signup.php">Register</a></li>';
+    }
 }
 
 echo '<li class="nav-item border rounded"><a class="nav-link" href="/core/hide.php">Hide the page! [F9]</a></li>';

@@ -1,6 +1,6 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
-require_once '../config.php';
 $mysqli = $_DB;
 
 $searchArray = (explode(',', $_POST['search']));
